@@ -1,0 +1,6 @@
+Fname   ,Lname    ,Phone     ,Email                       ,Password  ,AccountType,Country   ,Nationality,Address                        ,Title1,Fname1    ,Lname1    ,Title2,Fname2     ,Lname2
+Teressa ,Aufderhar,8020032759,travis.flatley@yahoo.com    ,Pass@12345,Customer   ,Bangladesh,Bangladesh ,"House# 35, Road# 1, Mirpur-11",MISS  ,Wei       ,Aufderhar ,MRS   ,Terrance   ,Cormier
+Zofia   ,Volkman  ,0125730893,douglas.oreilly@hotmail.com ,Pass@12345,Agent      ,Bangladesh,Bangladesh ,"House# 35, Road# 1, Mirpur-11",MISS  ,Antoinette,Feeney    ,MRS   ,Providencia,Cummerata
+Marshall,Ward     ,1525880707,del.kihn@yahoo.com          ,Pass@12345,Customer   ,Bangladesh,Bangladesh ,"House# 35, Road# 1, Mirpur-11",MR    ,Shaun     ,Padberg   ,MR    ,Hubert     ,Tillman
+Leighann,Kuhn     ,8703155762,monroe.kuhn@yahoo.com       ,Pass@12345,Supplier   ,Bangladesh,Bangladesh ,"House# 35, Road# 1, Mirpur-11",MRS   ,Scot      ,Stokes    ,MR    ,Chris      ,Braun
+Marian  ,Huel     ,0039244064,tasha.christiansen@gmail.com,Pass@12345,Agent      ,Bangladesh,Bangladesh ,"House# 35, Road# 1, Mirpur-11",MISS  ,Hulda     ,Williamson,MRS   ,Charles    ,Runolfsson
