@@ -1,3 +1,5 @@
 .idea/
 target/
 chromedriver_log.txt
+driver/
+screenshot/
