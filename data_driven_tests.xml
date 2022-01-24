@@ -5,7 +5,7 @@
         <classes>
             <class name="com.automation.tests.DataDrivenTest">
                 <methods>
-                    <include name="loginTest"/>
+                    <include name="googleSearchTest"/>
                 </methods>
             </class>
         </classes>
