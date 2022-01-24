@@ -5,12 +5,12 @@
         <classes>
             <class name="com.automation.tests.DataDrivenTest">
                 <methods>
-                    <include name="loginTest"/>
+                    <include name="googleSearchTest"/>
                 </methods>
             </class>
-            <class name="com.automation.tests.DataDriverParallelTest">
+            <class name="com.automation.tests.DataDrivenParallelTest">
                 <methods>
-                    <include name="loginTest"/>
+                    <include name="googleSearchParallelTest"/>
                 </methods>
             </class>
         </classes>

@@ -4,12 +4,12 @@ import com.automation.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class LoginPage extends BasePage {
+public class GoogleSearchPage extends BasePage {
     WebDriver driver;
     By agreeButton = By.xpath("//*[text()='I agree']");
     By searchField = By.name("q");
 
-    public LoginPage(WebDriver driver) {
+    public GoogleSearchPage(WebDriver driver) {
         this.driver = driver;
     }
 

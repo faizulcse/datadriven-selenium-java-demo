@@ -1,7 +1,7 @@
 package com.automation.tests;
 
 import com.automation.BaseTest;
-import com.automation.webPages.LoginPage;
+import com.automation.webPages.GoogleSearchPage;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import utils.CSVHelper;
@@ -13,10 +13,10 @@ public class DataDrivenTest extends BaseTest {
         return CSVHelper.readCsvData(users_csv);
     }
 
-    @Test(dataProvider = "userdata")
-    public void loginTest(Object[] data) {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.clickAgreeButton();
-        loginPage.insertSearchText(data[0].toString());
+    @Test(testName = "Search on Google with single browser.", dataProvider = "userdata")
+    public void googleSearchTest(Object[] data) {
+        GoogleSearchPage searchPage = new GoogleSearchPage(driver);
+        searchPage.clickAgreeButton();
+        searchPage.insertSearchText(data[0].toString());
     }
 }
