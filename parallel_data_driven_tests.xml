@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Selenium DataDriven Tests" data-provider-thread-count="10" thread-count="5">
-    <test verbose="2" name="Parallel DataDriven Tests" parallel="methods">
+<suite name="All Test Suite">
+    <test verbose="2" preserve-order="true" name="datadriven-selenium-java-demo">
         <classes>
-            <class name="com.automation.tests.DataDriverParallelTest"/>
+            <class name="com.automation.tests.DataDriverParallelTest">
+                <methods>
+                    <include name="loginTest"/>
+                </methods>
+            </class>
         </classes>
     </test>
 </suite>

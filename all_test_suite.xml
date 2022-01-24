@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
-    <test verbose="2" preserve-order="true" name="datadriven-selenium-java-demo">
+    <test verbose="2" preserve-order="true" name="C:/Users/BS705/Documents/GitHub/datadriven-selenium-java-demo">
         <classes>
             <class name="com.automation.tests.DataDrivenTest">
+                <methods>
+                    <include name="loginTest"/>
+                </methods>
+            </class>
+            <class name="com.automation.tests.DataDriverParallelTest">
                 <methods>
                     <include name="loginTest"/>
                 </methods>
