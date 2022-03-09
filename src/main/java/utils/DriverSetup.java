@@ -6,6 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.FileOutputStream;
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,7 +27,7 @@ public class DriverSetup {
             options.setHeadless(config.getBoolean("headless"));
 
             driver = new ChromeDriver(service, options);
-            driver.manage().timeouts().implicitlyWait(config.getInteger("wait"), TimeUnit.SECONDS);
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(config.getInteger("wait")));
             driver.get(config.getString("url"));
         } catch (Exception e) {
             e.printStackTrace();
