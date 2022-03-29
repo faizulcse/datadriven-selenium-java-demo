@@ -11,6 +11,7 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <test.suite>testng.xml</test.suite>
     </properties>
 
     <dependencies>
@@ -45,4 +46,25 @@
             <version>1.7.32</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M4</version>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>suites/${test.suite}</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <properties>
+                        <property>
+                            <name>dataproviderthreadcount</name>
+                            <value>5</value>
+                        </property>
+                    </properties>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
