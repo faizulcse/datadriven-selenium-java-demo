@@ -16,7 +16,7 @@ node('master') {
         }
 
         stage("Run Selenium Hub & Node") {
-            sh "docker-compose -f docker-compose.yml -p ${network} up --scale chrome=5 --scale=firefox=5 --scale=edge=5 -d --remove-orphans"
+            sh "docker-compose -f docker-compose.yml -p ${network} up --scale chrome=5 --scale firefox=5 --scale edge=5 -d --remove-orphans"
         }
 
         stage("Execute Automation Tests") {
