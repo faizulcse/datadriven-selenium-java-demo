@@ -16,8 +16,7 @@ public class DataDrivenParallelTest extends BaseTest {
 
     @Test(testName = "Search on Google with parallel browser.", dataProvider = "guestData")
     public void googleSearchParallelTest(Object[] data) {
-        WebDriver driver = driverThread.get();
-        GoogleSearchPage searchPage = new GoogleSearchPage(driver);
+        GoogleSearchPage searchPage = new GoogleSearchPage(getCurrentDriver());
         searchPage.clickAgreeButton();
         searchPage.insertSearchText(data[0].toString());
     }

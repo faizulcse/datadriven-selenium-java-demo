@@ -15,7 +15,7 @@ public class DataDrivenTest extends BaseTest {
 
     @Test(testName = "Search on Google with single browser.", dataProvider = "userdata")
     public void googleSearchTest(Object[] data) {
-        GoogleSearchPage searchPage = new GoogleSearchPage(driver);
+        GoogleSearchPage searchPage = new GoogleSearchPage(getCurrentDriver());
         searchPage.clickAgreeButton();
         searchPage.insertSearchText(data[0].toString());
     }

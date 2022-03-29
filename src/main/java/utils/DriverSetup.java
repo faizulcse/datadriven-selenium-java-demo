@@ -1,38 +1,42 @@
 package utils;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.io.FileOutputStream;
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DriverSetup {
     public static ResourceHelper config = new ResourceHelper().getResource("config");
+    private static String remoteUrl = Boolean.parseBoolean(System.getenv("DOCKER")) ? "http://hub:4444" : "http://localhost:4444";
 
-    public static WebDriver openBrowser() {
-        WebDriver driver = null;
+    public static RemoteWebDriver openBrowser(String browser) {
+        Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
         try {
-            Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
-            System.setProperty(ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY, System.getProperty("user.dir") + "/driver/chromedriver.exe");
-            System.setProperty(ChromeDriverService.CHROME_DRIVER_SILENT_OUTPUT_PROPERTY, "true");
-
-            ChromeDriverService service = new ChromeDriverService.Builder().build();
-            service.sendOutputTo(new FileOutputStream("chromedriver_log.txt"));
-            ChromeOptions options = new ChromeOptions();
-            options.setHeadless(config.getBoolean("headless"));
-
-            driver = new ChromeDriver(service, options);
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(config.getInteger("wait")));
-            driver.get(config.getString("url"));
+            switch (browser) {
+                case "chrome":
+                    ChromeOptions chromeOptions = new ChromeOptions();
+                    chromeOptions.setHeadless(config.getBoolean("headless"));
+                    return new RemoteWebDriver(new URL(remoteUrl), chromeOptions);
+                case "firefox":
+                    FirefoxOptions firefoxOptions = new FirefoxOptions();
+                    firefoxOptions.setHeadless(config.getBoolean("headless"));
+                    return new RemoteWebDriver(new URL(remoteUrl), firefoxOptions);
+                case "edge":
+                    EdgeOptions edgeOptions = new EdgeOptions();
+                    edgeOptions.setHeadless(config.getBoolean("headless"));
+                    return new RemoteWebDriver(new URL(remoteUrl), edgeOptions);
+                default:
+                    throw new RuntimeException("Error! Please enter a valid browser [" + browser + "]");
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return driver;
     }
 
     public static void closeBrowser(WebDriver driver) {
