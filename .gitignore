@@ -1,5 +1,6 @@
 .idea/
 target/
 chromedriver_log.txt
-driver/
+driver/*
+!driver/selenium-server-4.1.2.jar
 screenshot/
