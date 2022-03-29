@@ -2,7 +2,6 @@ package com.automation.tests;
 
 import com.automation.BaseTest;
 import com.automation.webPages.GoogleSearchPage;
-import org.openqa.selenium.WebDriver;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import utils.CSVHelper;

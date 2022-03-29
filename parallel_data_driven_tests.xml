@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="All Test Suite">
-    <test verbose="2" preserve-order="true" name="datadriven-selenium-java-demo">
+<suite name="All Test Suite" parallel="tests" data-provider-thread-count="5">
+    <test verbose="2" parallel="methods" name="datadriven-selenium-java-demo">
+        <parameter name="browserType" value="chrome"/>
         <classes>
-            <class name="com.automation.tests.DataDrivenParallelTest">
-                <methods>
-                    <include name="googleSearchParallelTest"/>
-                </methods>
-            </class>
+            <class name="com.automation.tests.DataDrivenParallelTest"/>
         </classes>
     </test>
 </suite>
