@@ -1,7 +1,5 @@
 package com.automation;
 
-import com.github.javafaker.Faker;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -17,9 +15,10 @@ public class BaseTest {
     @BeforeMethod
     @Parameters({"browserType"})
     public void setUp(@Optional("chrome") String browserType) {
-        setCurrentDriver(DriverSetup.openBrowser(browserType));
-        getCurrentDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(DriverSetup.config.getInteger("wait")));
-        getCurrentDriver().get(DriverSetup.config.getString("url"));
+        RemoteWebDriver driver = DriverSetup.openBrowser(browserType);
+        assert driver != null;
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(DriverSetup.config.getInteger("wait")));
+        driver.get(DriverSetup.config.getString("url"));
     }
 
     @AfterMethod
@@ -27,7 +26,7 @@ public class BaseTest {
         DriverSetup.closeBrowser(getCurrentDriver());
     }
 
-    public static WebDriver getCurrentDriver() {
+    public static RemoteWebDriver getCurrentDriver() {
         return driverThread.get();
     }
 
