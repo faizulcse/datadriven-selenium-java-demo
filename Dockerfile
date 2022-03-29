@@ -5,4 +5,5 @@ MAINTAINER Faizul Islam (faizulcse@gmail.com)
 WORKDIR /project
 USER root
 COPY src /project/src
+COPY suites /project/suites
 COPY pom.xml /project

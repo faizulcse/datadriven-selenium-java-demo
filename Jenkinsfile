@@ -20,7 +20,7 @@ node('master') {
         }
 
         stage("Execute Automation Tests") {
-            def exitCode = sh script: "docker run -t --network=${network}_default --name ${container} -e DOCKER='true' ${image} mvn clean test", returnStatus: true
+            def exitCode = sh script: "docker run -t --network=${network}_default --name ${container} -e DOCKER='true' ${image} mvn clean test -q", returnStatus: true
             if (exitCode == 1)
                 currentBuild.result = "UNSTABLE"
         }
