@@ -19,11 +19,13 @@ public class BaseTest {
         assert driver != null;
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(DriverSetup.config.getInteger("wait")));
         driver.get(DriverSetup.config.getString("url"));
+        setCurrentDriver(driver);
     }
 
     @AfterMethod
     public void tearDown() {
-        DriverSetup.closeBrowser(getCurrentDriver());
+        if (getCurrentDriver() != null)
+            DriverSetup.closeBrowser(getCurrentDriver());
     }
 
     public static RemoteWebDriver getCurrentDriver() {

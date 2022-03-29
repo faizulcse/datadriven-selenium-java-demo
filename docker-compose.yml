@@ -17,7 +17,7 @@ services:
       - SE_EVENT_BUS_HOST=SeleniumHub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_MAX_SESSIONS=5
+      - SE_NODE_MAX_SESSIONS=1
     depends_on:
       - hub
 
@@ -31,7 +31,7 @@ services:
       - SE_EVENT_BUS_HOST=SeleniumHub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_MAX_SESSIONS=5
+      - SE_NODE_MAX_SESSIONS=1
     depends_on:
       - hub
 
@@ -45,6 +45,6 @@ services:
       - SE_EVENT_BUS_HOST=SeleniumHub
       - SE_EVENT_BUS_PUBLISH_PORT=4442
       - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
-      - SE_NODE_MAX_SESSIONS=5
+      - SE_NODE_MAX_SESSIONS=1
     depends_on:
       - hub
