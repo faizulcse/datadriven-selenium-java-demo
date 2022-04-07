@@ -13,7 +13,7 @@ public class DriverSetup {
     public static ResourceHelper config = new ResourceHelper().getResource("config");
     private static String remoteUrl = Boolean.parseBoolean(System.getenv("DOCKER")) ? "http://hub:4444/wd/hub" : "http://localhost:4444/wd/hub";
 
-    public static RemoteWebDriver openBrowser(String browser) {
+    public static synchronized RemoteWebDriver openBrowser(String browser) {
         System.out.println("Selected Browser: =========> " + browser);
         Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
         try {
@@ -39,7 +39,7 @@ public class DriverSetup {
         }
     }
 
-    public static void closeBrowser(RemoteWebDriver driver) {
+    public static synchronized void closeBrowser(RemoteWebDriver driver) {
         driver.quit();
     }
 }
