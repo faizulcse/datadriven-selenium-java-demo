@@ -18,8 +18,12 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Start selenoid
-        uses: Xotabu4/selenoid-github-action@v2
+      - name: Start Docker Compose
+        run: docker-compose up -d --remove-orphans
 
       - name: Build with Maven
         run: mvn clean test
+
+      - name: Start Docker Compose
+        run: |
+          docker-compose down -d --remove-orphans
