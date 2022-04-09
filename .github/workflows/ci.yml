@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 11
@@ -21,15 +21,15 @@ jobs:
       - name: Start Docker Compose
         run: docker-compose -p hubnetwork up --scale chrome=5 --scale firefox=5 --scale edge=5 -d --remove-orphans
 
-#      - name: Run with Maven
-#        run: mvn clean test -q
+      - name: Run with Maven
+        run: mvn clean test -q
 
-      - name: Run with Docker
-        run: |
-          docker build -t myimage .
-          docker run -t --network=hubnetwork_default --name mycontainer -e DOCKER=true myimage mvn clean test -q
-          docker rm mycontainer
-          docker rmi myimage -f
+#      - name: Run with Docker
+#        run: |
+#          docker build -t myimage .
+#          docker run -t --network=hubnetwork_default --name mycontainer -e DOCKER=true myimage mvn clean test -q
+#          docker rm mycontainer
+#          docker rmi myimage -f
 
       - name: Stop Docker Compose
         run: docker-compose -p hubnetwork down -d --remove-orphans
