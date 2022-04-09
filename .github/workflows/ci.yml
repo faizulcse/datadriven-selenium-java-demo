@@ -18,10 +18,8 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Start Selenium Standalone
-        run: |
-          cd C:\selenium
-          java -jar selenium-server.jar standalone
+      - name: Start selenoid
+        uses: Xotabu4/selenoid-github-action@v2
 
       - name: Build with Maven
         run: mvn clean test
