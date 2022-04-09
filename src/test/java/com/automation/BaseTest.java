@@ -10,12 +10,13 @@ import utils.DriverSetup;
 import java.time.Duration;
 
 public class BaseTest {
-    private static ThreadLocal<RemoteWebDriver> driverThread = new ThreadLocal<>();
+    private static final ThreadLocal<RemoteWebDriver> driverThread = new ThreadLocal<>();
+    private static final String browser = System.getProperty("browser");
 
     @BeforeMethod
     @Parameters({"browserType"})
     public void setUp(@Optional("chrome") String browserType) {
-        RemoteWebDriver driver = DriverSetup.openBrowser(browserType);
+        RemoteWebDriver driver = DriverSetup.openBrowser(browser == null ? browserType : browser);
         assert driver != null;
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(DriverSetup.config.getInteger("wait")));
         driver.get(DriverSetup.config.getString("url"));
