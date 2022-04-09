@@ -14,7 +14,6 @@ public class DriverSetup {
     private static final String remoteUrl = Boolean.parseBoolean(System.getenv("DOCKER")) ? "http://hub:4444/wd/hub" : "http://localhost:4444/wd/hub";
 
     public static synchronized RemoteWebDriver openBrowser(String browser) {
-        System.out.println("Selected Browser: =========> " + browser);
         Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
         try {
             switch (browser) {
