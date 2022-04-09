@@ -21,7 +21,7 @@
     - Go to project root dir
     - Open terminal/cmd
     - Build image: `docker build -t myimage .`
-    - Run selenium-server: `docker-compose -p hubnetwork up -d --remove-orphans`
+    - Run selenium-server: `docker-compose -p hubnetwork up --scale chrome=5 --scale firefox=5 --scale edge=5 -d --remove-orphans`
     - Run docker
       container: `docker run -t --network=hubnetwork_default -e DOCKER=true myimage mvn clean test -Dbrowser=chrome -q`
     - Stop selenium-server: `docker-compose -p hubnetwork down --remove-orphans`
