@@ -4,13 +4,13 @@
     <test verbose="2" preserve-order="true" name="datadriven-selenium-java-demo">
         <classes>
             <class name="com.automation.tests.DataDrivenParallelTest">
-                <parameter name="browserType" value="firefox"/>
+<!--                <parameter name="browserType" value="chrome"/>-->
                 <methods>
                     <include name="googleSearchParallelTest"/>
                 </methods>
             </class>
             <class name="com.automation.tests.DataDrivenTest">
-                <parameter name="browserType" value="edge"/>
+<!--                <parameter name="browserType" value="edge"/>-->
                 <methods>
                     <include name="googleSearchTest"/>
                 </methods>
