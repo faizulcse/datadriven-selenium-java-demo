@@ -1,10 +1,21 @@
 name: Selenium Java CI
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+#  push:
+#    branches: [ master ]
+#    pull_request:
+#      branches: [ master ]
+
+  workflow_dispatch:
+    inputs:
+      browser:
+        description: 'Enter the Browser name'
+        required: true
+        default: 'chrome'
+      parallel:
+        description: 'Enter the Parallel Browser number'
+        required: true
+        default: '1'
 
 jobs:
   build:
@@ -19,10 +30,10 @@ jobs:
           cache: maven
 
       - name: Start Docker Compose
-        run: docker-compose -p hubnetwork up --scale chrome=5 -d --remove-orphans
+        run: docker-compose -p hubnetwork up --scale ${{ github.event.inputs.browser }}=${{ github.event.inputs.parallel }} -d --remove-orphans
 
       - name: Run with Maven
-        run: mvn clean test -Dbrowser=chrome -q
+        run: mvn clean test -Dbrowser=${{ github.event.inputs.browser }} -q
 
 #      - name: Run with Docker
 #        run: |
