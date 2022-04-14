@@ -1,6 +1,6 @@
 package com.automation;
 
-import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
@@ -10,19 +10,13 @@ import utils.DriverSetup;
 import java.time.Duration;
 
 public class BaseTest {
-    private static final ThreadLocal<RemoteWebDriver> driverThread = new ThreadLocal<>();
+    private static final ThreadLocal<WebDriver> driverThread = new ThreadLocal<>();
     private static final String browser = System.getProperty("browser");
-
-    static {
-        if (browser != null)
-            System.out.println("Selected Browser: =========> " + browser);
-    }
 
     @BeforeMethod
     @Parameters({"browserType"})
     public void setUp(@Optional("chrome") String browserType) {
-        RemoteWebDriver driver = DriverSetup.openBrowser(browser == null ? browserType : browser);
-        assert driver != null;
+        WebDriver driver = DriverSetup.openBrowser(browser == null ? browserType : browser);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(DriverSetup.config.getInteger("wait")));
         driver.get(DriverSetup.config.getString("url"));
         setCurrentDriver(driver);
@@ -34,11 +28,11 @@ public class BaseTest {
             DriverSetup.closeBrowser(getCurrentDriver());
     }
 
-    public static RemoteWebDriver getCurrentDriver() {
+    public static WebDriver getCurrentDriver() {
         return driverThread.get();
     }
 
-    public static void setCurrentDriver(RemoteWebDriver driver) {
+    public static void setCurrentDriver(WebDriver driver) {
         driverThread.set(driver);
     }
 }

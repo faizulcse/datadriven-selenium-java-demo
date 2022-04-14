@@ -1,25 +1,12 @@
 name: Selenium Java CI
 
 on:
-#  push:
-#    branches: [ master ]
-#    pull_request:
-#      branches: [ master ]
-
-  workflow_dispatch:
-    inputs:
-      browser:
-        description: 'Enter the Browser name'
-        required: true
-        default: 'chrome'
-      parallel:
-        description: 'Enter the Parallel Browser number'
-        required: true
-        default: '1'
+  push:
+    branches: [ local_browser ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 11
@@ -29,18 +16,5 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Start Docker Compose
-        run: docker-compose -p hubnetwork up --scale ${{ github.event.inputs.browser }}=${{ github.event.inputs.parallel }} -d --remove-orphans
-
       - name: Run with Maven
-        run: mvn clean test -Dbrowser=${{ github.event.inputs.browser }} -q
-
-#      - name: Run with Docker
-#        run: |
-#          docker build -t myimage .
-#          docker run -t --network=hubnetwork_default --name mycontainer -e DOCKER=true myimage mvn clean test -q
-#          docker rm mycontainer
-#          docker rmi myimage -f
-
-      - name: Stop Docker Compose
-        run: docker-compose -p hubnetwork down -d --remove-orphans
+        run: mvn clean test -q
