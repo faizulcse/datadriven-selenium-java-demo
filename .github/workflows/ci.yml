@@ -29,8 +29,8 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Start Docker Compose
-        run: docker-compose -p hubnetwork up --scale ${{ github.event.inputs.browser }}=${{ github.event.inputs.parallel }} -d --remove-orphans
+#      - name: Start Docker Compose
+#        run: docker-compose -p hubnetwork up --scale ${{ github.event.inputs.browser }}=${{ github.event.inputs.parallel }} -d --remove-orphans
 
       - name: Run with Maven
         run: mvn clean test -Dbrowser=${{ github.event.inputs.browser }} -q
@@ -42,5 +42,5 @@ jobs:
 #          docker rm mycontainer
 #          docker rmi myimage -f
 
-      - name: Stop Docker Compose
-        run: docker-compose -p hubnetwork down -d --remove-orphans
+#      - name: Stop Docker Compose
+#        run: docker-compose -p hubnetwork down -d --remove-orphans
