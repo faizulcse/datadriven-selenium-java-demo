@@ -1,4 +1,0 @@
-#!/bin/sh
-echo "Starting copy from repository to work tree..."
-mvn -v
-echo "Finished."
