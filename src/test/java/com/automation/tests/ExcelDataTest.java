@@ -11,11 +11,23 @@ public class ExcelDataTest {
 
     @DataProvider(name = "singleTripData")
     public static Object[][] getSingleTripData() {
-        return ExcelUtils.getExcelData(filePath, "SingleTrip");
+        ExcelUtils excelUtils = new ExcelUtils(filePath).getWorkSheet("SingleTrip");
+        return excelUtils.getExcelData();
+    }
+
+    @DataProvider(name = "roundTripData")
+    public static Object[][] getRoundTripData() {
+        ExcelUtils excelUtils = new ExcelUtils(filePath).getWorkSheet(1);
+        return excelUtils.getExcelData();
     }
 
     @Test(dataProvider = "singleTripData")
-    public void excelSheetDataTest(Object[] data) {
+    public void singleSheetDataTest(Object[] data) {
+        System.out.println(Arrays.toString(data));
+    }
+
+    @Test(dataProvider = "roundTripData")
+    public void roundSheetDataTest(Object[] data) {
         System.out.println(Arrays.toString(data));
     }
 }

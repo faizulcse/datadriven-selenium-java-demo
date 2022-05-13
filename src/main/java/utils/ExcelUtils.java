@@ -11,17 +11,28 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ExcelUtils {
-    private static XSSFSheet excelWSheet;
-    private static XSSFWorkbook excelWBook;
-    private static XSSFCell cell;
-    private static XSSFRow row;
+    private String excelFile;
+    private XSSFSheet excelWSheet;
+    private XSSFWorkbook excelWBook;
+    private XSSFCell cell;
+    private XSSFRow row;
 
-    public ExcelUtils(String excelFile) throws IOException {
-        excelWBook = new XSSFWorkbook(new FileInputStream(excelFile));
+    public ExcelUtils(String excelFile) {
+        try {
+            this.excelFile = excelFile;
+            excelWBook = new XSSFWorkbook(new FileInputStream(excelFile));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public ExcelUtils getWorkSheet(String sheetName) {
         excelWSheet = excelWBook.getSheet(sheetName);
+        return this;
+    }
+
+    public ExcelUtils getWorkSheet(int index) {
+        excelWSheet = excelWBook.getSheetAt(index);
         return this;
     }
 
@@ -40,29 +51,21 @@ public class ExcelUtils {
         return formatter.formatCellValue(cell);
     }
 
-    public static Object[][] getExcelData(String excelFile, String sheetName) {
-        try {
-            ExcelUtils excelUtils = new ExcelUtils(excelFile).getWorkSheet(sheetName);
+    public Object[][] getExcelData() {
+        int r = this.getRowCount();
+        int c = this.getCellCount(1);
 
-            int r = excelUtils.getRowCount();
-            int c = excelUtils.getCellCount(1);
-
-            String[][] data = new String[r][c];
-            for (int i = 1; i <= r; i++) {
-                for (int j = 0; j < c; j++) {
-                    data[i - 1][j] = excelUtils.getCellData(i, j);
-                }
+        String[][] data = new String[r][c];
+        for (int i = 1; i <= r; i++) {
+            for (int j = 0; j < c; j++) {
+                data[i - 1][j] = this.getCellData(i, j);
             }
-            return data;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
         }
+        return data;
     }
 
-    public void setCellData(String excelFile, String sheetName, int rowNum, int colNum, String data) {
+    public void setCellData(int rowNum, int colNum, String data) {
         try {
-            new ExcelUtils(excelFile).getWorkSheet(sheetName);
             row = excelWSheet.getRow(rowNum);
             cell = row.createCell(colNum);
             cell.setCellValue(data);
