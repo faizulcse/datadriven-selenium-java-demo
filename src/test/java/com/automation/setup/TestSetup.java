@@ -35,6 +35,8 @@ public class TestSetup {
         try {
             String browserType = browser == null ? config.getString("browser") : browser;
             RemoteWebDriver driver = config.getBoolean("remote") ? getRemoteDriver(browserType) : getLocalDriver(browserType);
+            driver.manage().window().maximize();
+            driver.manage().deleteAllCookies();
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(config.getInteger("wait")));
             driver.get(config.getString("url"));
             setCurrentDriver(driver);
