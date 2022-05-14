@@ -5,7 +5,7 @@ import dataProvider.ExcelDataProvider;
 
 import java.util.Arrays;
 
-public class ExcelDataTest {
+public class ExcelDataTest extends BaseTest {
 
     @Test(dataProvider = "singleTripData", dataProviderClass = ExcelDataProvider.class)
     public void singleSheetDataTest(Object[] data) {

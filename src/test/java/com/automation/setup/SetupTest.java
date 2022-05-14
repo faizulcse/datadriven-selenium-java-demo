@@ -1,4 +1,4 @@
-package com.automation.testScenario;
+package com.automation.setup;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -20,22 +20,31 @@ import java.util.logging.Logger;
 
 public class SetupTest {
     public static ResourceHelper config = new ResourceHelper().getResource("config");
+    private static final ThreadLocal<RemoteWebDriver> driverThread = new ThreadLocal<>();
 
-    public static synchronized RemoteWebDriver startDriver(String browser) {
+    protected static RemoteWebDriver getCurrentDriver() {
+        return driverThread.get();
+    }
+
+    private static void setCurrentDriver(RemoteWebDriver driver) {
+        driverThread.set(driver);
+    }
+
+    public static synchronized void startDriver(String browser) {
         Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
-        RemoteWebDriver driver = null;
         try {
-            driver = config.getBoolean("remote") ? getRemoteDriver(browser) : getLocalDriver(browser);
+            String browserType = browser == null ? config.getString("browser") : browser;
+            RemoteWebDriver driver = config.getBoolean("remote") ? getRemoteDriver(browserType) : getLocalDriver(browserType);
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(config.getInteger("wait")));
             driver.get(config.getString("url"));
+            setCurrentDriver(driver);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        return driver;
     }
 
-    public static synchronized void stopDriver(RemoteWebDriver driver) {
-        driver.quit();
+    public static synchronized void stopDriver() {
+        getCurrentDriver().quit();
     }
 
     public static synchronized RemoteWebDriver getRemoteDriver(String browser) throws MalformedURLException {
