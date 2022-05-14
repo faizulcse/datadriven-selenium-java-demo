@@ -4,7 +4,7 @@
     <test verbose="2" parallel="methods" name="datadriven-selenium-java-demo">
         <parameter name="browserType" value="chrome"/>
         <classes>
-            <class name="com.automation.tests.DataDrivenParallelTest"/>
+            <class name="com.automation.testScenario.DataDrivenParallelTest"/>
         </classes>
     </test>
 </suite>

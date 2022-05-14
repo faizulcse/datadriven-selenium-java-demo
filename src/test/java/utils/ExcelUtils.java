@@ -51,19 +51,6 @@ public class ExcelUtils {
         return formatter.formatCellValue(cell);
     }
 
-    public Object[][] getExcelData() {
-        int r = this.getRowCount();
-        int c = this.getCellCount(1);
-
-        String[][] data = new String[r][c];
-        for (int i = 1; i <= r; i++) {
-            for (int j = 0; j < c; j++) {
-                data[i - 1][j] = this.getCellData(i, j);
-            }
-        }
-        return data;
-    }
-
     public void setCellData(int rowNum, int colNum, String data) {
         try {
             row = excelWSheet.getRow(rowNum);

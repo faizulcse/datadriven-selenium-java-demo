@@ -3,7 +3,7 @@
 <suite name="All Test Suite">
     <test verbose="2" preserve-order="true" name="datadriven-selenium-java-demo">
         <classes>
-            <class name="com.automation.tests.DataDrivenTest">
+            <class name="com.automation.testScenario.DataDrivenTest">
                 <methods>
                     <include name="googleSearchTest"/>
                 </methods>
