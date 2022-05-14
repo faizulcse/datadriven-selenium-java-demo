@@ -1,6 +1,6 @@
 package com.automation.testScenario;
 
-import com.automation.setup.SetupTest;
+import com.automation.setup.TestSetup;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
@@ -10,11 +10,11 @@ public class BaseTest {
     @BeforeMethod
     @Parameters({"browserType"})
     public void setUp(@Optional("chrome") String browser) {
-        SetupTest.startDriver(browser);
+        TestSetup.startDriver(browser);
     }
 
     @AfterMethod
     public void tearDown() {
-        SetupTest.stopDriver();
+        TestSetup.stopDriver();
     }
 }

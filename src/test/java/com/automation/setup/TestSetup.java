@@ -18,7 +18,7 @@ import java.time.Duration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SetupTest {
+public class TestSetup {
     public static ResourceHelper config = new ResourceHelper().getResource("config");
     private static final ThreadLocal<RemoteWebDriver> driverThread = new ThreadLocal<>();
 
