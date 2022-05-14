@@ -29,8 +29,8 @@ public class BaseTest {
 
     @AfterMethod
     public void tearDown(ITestResult result) {
-        String testName = (ITestResult.FAILURE == result.getStatus() ? "✗" : "✓") + result.getName();
-        TestSetup.takeScreenShot(testName);
+//        String testName = (ITestResult.FAILURE == result.getStatus() ? "✗" : "✓") + result.getName();
+//        TestSetup.takeScreenShot(testName);
         TestSetup.stopDriver();
     }
 }
