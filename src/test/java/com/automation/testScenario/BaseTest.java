@@ -13,22 +13,22 @@ public class BaseTest {
 
     @BeforeMethod
     @Parameters({"browserType"})
-    public void setUp(@Optional("chrome") String browserType) {
+    private void setUp(@Optional("chrome") String browserType) {
         RemoteWebDriver driver = SetupTest.startDriver(browserType == null ? config.getString("browser") : browserType);
         setCurrentDriver(driver);
     }
 
     @AfterMethod
-    public void tearDown() {
+    private void tearDown() {
         if (getCurrentDriver() != null)
             SetupTest.stopDriver(getCurrentDriver());
     }
 
-    public static RemoteWebDriver getCurrentDriver() {
+    protected static RemoteWebDriver getCurrentDriver() {
         return driverThread.get();
     }
 
-    public static void setCurrentDriver(RemoteWebDriver driver) {
+    private static void setCurrentDriver(RemoteWebDriver driver) {
         driverThread.set(driver);
     }
 }

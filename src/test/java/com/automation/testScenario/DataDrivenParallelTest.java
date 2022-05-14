@@ -1,6 +1,7 @@
 package com.automation.testScenario;
 
-import com.automation.webPages.GoogleSearchPage;
+import com.automation.testClasses.GoogleSearchPage;
+import com.automation.testClasses.LoginPage;
 import dataProvider.CsvDataProvider;
 import org.testng.annotations.Test;
 

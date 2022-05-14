@@ -1,6 +1,5 @@
 package com.automation.testClasses;
 
-import com.automation.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
