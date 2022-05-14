@@ -1,6 +1,9 @@
 package com.automation.setup;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -10,8 +13,11 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import utils.AppData;
 import utils.ResourceHelper;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
@@ -30,23 +36,29 @@ public class TestSetup {
         driverThread.set(driver);
     }
 
-    public static synchronized void startDriver(String browser) {
+    public static synchronized void startDriver(String browser) throws MalformedURLException {
         Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
-        try {
-            String browserType = browser == null ? config.getString("browser") : browser;
-            RemoteWebDriver driver = config.getBoolean("remote") ? getRemoteDriver(browserType) : getLocalDriver(browserType);
-            driver.manage().window().maximize();
-            driver.manage().deleteAllCookies();
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(config.getInteger("wait")));
-            driver.get(config.getString("url"));
-            setCurrentDriver(driver);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        String browserType = browser == null ? config.getString("browser") : browser;
+        RemoteWebDriver driver = config.getBoolean("remote") ? getRemoteDriver(browserType) : getLocalDriver(browserType);
+        driver.manage().window().maximize();
+        driver.manage().deleteAllCookies();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(config.getInteger("wait")));
+        driver.get(config.getString("url"));
+        setCurrentDriver(driver);
     }
 
     public static synchronized void stopDriver() {
         getCurrentDriver().quit();
+    }
+
+    public static void takeScreenShot(String screenshotName) {
+        String screenshot = AppData.screenShotDir + screenshotName + ".png";
+        File screenshotFile = ((TakesScreenshot) getCurrentDriver()).getScreenshotAs(OutputType.FILE);
+        try {
+            FileUtils.copyFile(screenshotFile, new File(screenshot));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static synchronized RemoteWebDriver getRemoteDriver(String browser) throws MalformedURLException {
