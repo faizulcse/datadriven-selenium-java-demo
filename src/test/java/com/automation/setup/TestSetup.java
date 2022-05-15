@@ -20,13 +20,17 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TestSetup {
     public static ResourceHelper config = new ResourceHelper().getResource("config");
     private static final ThreadLocal<RemoteWebDriver> driverThread = new ThreadLocal<>();
+    public static int i;
 
     protected static RemoteWebDriver getCurrentDriver() {
         return driverThread.get();
@@ -51,13 +55,20 @@ public class TestSetup {
         getCurrentDriver().quit();
     }
 
-    public static void takeScreenShot(String screenshotName) {
-        String screenshot = AppData.screenShotDir + screenshotName + ".png";
+    public static String takeScreenShot(String screenshotName) throws IOException {
+        String screenshot = screenshotName + ".png";
+        if (new File(AppData.screenShotDir + screenshot).exists())
+            screenshot = screenshotName + "_" + ++i + ".png";
         File screenshotFile = ((TakesScreenshot) getCurrentDriver()).getScreenshotAs(OutputType.FILE);
-        try {
-            FileUtils.copyFile(screenshotFile, new File(screenshot));
-        } catch (IOException e) {
-            e.printStackTrace();
+        FileUtils.copyFile(screenshotFile, new File(AppData.screenShotDir + screenshot));
+        return screenshot;
+    }
+
+
+    public static void deleteAllScreenshot() throws IOException {
+        for (File listOfFile : Objects.requireNonNull(new File(AppData.screenShotDir).listFiles())) {
+            if (listOfFile.getName().endsWith(".png"))
+                Files.deleteIfExists(Paths.get(String.valueOf(listOfFile)));
         }
     }
 
