@@ -40,8 +40,14 @@ public class CustomReportListener extends TestListenerAdapter {
     }
 
     public void onTestSuccess(ITestResult tr) {
-        logger = extent.createTest(tr.getName()); // create new entry in th report
-        logger.log(Status.PASS, MarkupHelper.createLabel(tr.getName(), ExtentColor.GREEN)); // send the passed information to the report with GREEN color highlighted
+        try {
+            String screenShotName = TestSetup.takeScreenShot(tr.getName());
+            logger = extent.createTest(tr.getName()); // create new entry in th report
+            logger.log(Status.PASS, MarkupHelper.createLabel(tr.getName(), ExtentColor.GREEN)); // send the passed information to the report with GREEN color highlighted
+            logger.pass(screenShotName, MediaEntityBuilder.createScreenCaptureFromPath(AppData.screenShotDir + screenShotName).build());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onTestFailure(ITestResult tr) {
@@ -52,7 +58,6 @@ public class CustomReportListener extends TestListenerAdapter {
             logger.fail(screenShotName, MediaEntityBuilder.createScreenCaptureFromPath(AppData.screenShotDir + screenShotName).build());
             logger.fail(tr.getThrowable().getLocalizedMessage());
         } catch (IOException e) {
-            logger.log(Status.ERROR, e.getLocalizedMessage());
             e.printStackTrace();
         }
     }
