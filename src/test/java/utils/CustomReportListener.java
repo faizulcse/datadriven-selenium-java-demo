@@ -1,7 +1,9 @@
 package utils;
 
+import com.automation.setup.TestSetup;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
@@ -11,6 +13,8 @@ import com.aventstack.extentreports.reporter.configuration.Theme;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
+
+import java.io.IOException;
 
 
 public class CustomReportListener extends TestListenerAdapter {
@@ -35,34 +39,29 @@ public class CustomReportListener extends TestListenerAdapter {
         htmlReporter.config().setTheme(Theme.DARK);
     }
 
-    public void onTestStart(ITestResult result) {
-        System.out.println("==============> on test start"+result.getName() );
-    }
-
-
     public void onTestSuccess(ITestResult tr) {
         logger = extent.createTest(tr.getName()); // create new entry in th report
         logger.log(Status.PASS, MarkupHelper.createLabel(tr.getName(), ExtentColor.GREEN)); // send the passed information to the report with GREEN color highlighted
 
-//        try {
-//            String screenShotName = TestSetup.takeScreenShot(tr.getName());
-//            logger.pass(screenShotName, MediaEntityBuilder.createScreenCaptureFromPath(AppData.screenShotDir + screenShotName).build());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            String screenShotName = TestSetup.takeScreenShot(tr.getName());
+            logger.pass(screenShotName, MediaEntityBuilder.createScreenCaptureFromPath(AppData.screenShotDir + screenShotName).build());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onTestFailure(ITestResult tr) {
         logger = extent.createTest(tr.getName()); // create new entry in th report
         logger.log(Status.FAIL, MarkupHelper.createLabel(tr.getName(), ExtentColor.RED)); // send the passed information to the report with GREEN color highlighted
 
-//        try {
-//            String screenShotName = TestSetup.takeScreenShot(tr.getName());
-//            logger.fail(screenShotName, MediaEntityBuilder.createScreenCaptureFromPath(AppData.screenShotDir + screenShotName).build());
-//            logger.fail(tr.getThrowable().getLocalizedMessage());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            String screenShotName = TestSetup.takeScreenShot(tr.getName());
+            logger.fail(screenShotName, MediaEntityBuilder.createScreenCaptureFromPath(AppData.screenShotDir + screenShotName).build());
+            logger.fail(tr.getThrowable().getLocalizedMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onTestSkipped(ITestResult tr) {

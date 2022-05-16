@@ -23,6 +23,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,7 +32,7 @@ import java.util.logging.Logger;
 public class TestSetup {
     public static ResourceHelper config = new ResourceHelper().getResource("config");
     private static final ThreadLocal<RemoteWebDriver> driverThread = new ThreadLocal<>();
-    public static int i;
+    private static List<String> list = new ArrayList<>();
 
     protected static RemoteWebDriver getCurrentDriver() {
         return driverThread.get();
@@ -57,8 +59,6 @@ public class TestSetup {
 
     public static String takeScreenShot(String screenshotName) throws IOException {
         String screenshot = screenshotName + ".png";
-        if (new File(AppData.screenShotDir + screenshot).exists())
-            screenshot = screenshotName + "_" + ++i + ".png";
         File screenshotFile = ((TakesScreenshot) getCurrentDriver()).getScreenshotAs(OutputType.FILE);
         FileUtils.copyFile(screenshotFile, new File(AppData.screenShotDir + screenshot));
         return screenshot;
