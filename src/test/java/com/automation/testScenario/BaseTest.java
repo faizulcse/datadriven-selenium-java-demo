@@ -17,8 +17,8 @@ public class BaseTest implements ITest {
         TestSetup.deleteAllScreenshot();
     }
 
-    @BeforeMethod
     @Parameters({"browserType"})
+    @BeforeMethod
     public void setUp(@Optional("chrome") String browser, Method method) throws MalformedURLException {
         testName.set(TestSetup.getDataDrivenTestName(method.getName()));
         TestSetup.startDriver(browser);
