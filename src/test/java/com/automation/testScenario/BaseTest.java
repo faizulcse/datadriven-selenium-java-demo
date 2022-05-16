@@ -8,29 +8,22 @@ import org.testng.annotations.*;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class BaseTest implements ITest {
-    public static List<String> list = new ArrayList<>();
-    private ThreadLocal<String> testName = new ThreadLocal<>();
+    private final ThreadLocal<String> testName = new ThreadLocal<>();
 
     @BeforeSuite
     public void beforeSuite() throws IOException {
         TestSetup.deleteAllScreenshot();
     }
 
-    @BeforeMethod(alwaysRun = true)
+    @BeforeMethod
     @Parameters({"browserType"})
-    public void setUp(@Optional("chrome") String browser, Method method, Object[] row) throws MalformedURLException {
-        String tcName = method.getName();
-        if (list.contains(method.getName()))
-            testName.set(tcName + "_" + Collections.frequency(list, tcName));
-        list.add(tcName);
-
+    public void setUp(@Optional("chrome") String browser, Method method) throws MalformedURLException {
+        testName.set(TestSetup.getDataDrivenTestName(method.getName()));
         TestSetup.startDriver(browser);
     }
+
 
     @AfterMethod
     public void tearDown(ITestResult result) {

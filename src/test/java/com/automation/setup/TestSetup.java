@@ -24,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -64,6 +65,11 @@ public class TestSetup {
         return screenshot;
     }
 
+    public static String getDataDrivenTestName(String name) {
+        int i = Collections.frequency(list, name);
+        list.add(name);
+        return i > 0 ? name + "_" + i : name;
+    }
 
     public static void deleteAllScreenshot() throws IOException {
         for (File listOfFile : Objects.requireNonNull(new File(AppData.screenShotDir).listFiles())) {
