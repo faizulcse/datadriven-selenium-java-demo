@@ -29,9 +29,9 @@ public class CustomReportListener extends TestListenerAdapter {
 
         extent.attachReporter(htmlReporter);
         extent.setSystemInfo("OS", System.getProperty("os.name"));
+        extent.setSystemInfo("User", System.getProperty("user.name"));
         extent.setSystemInfo("Host", "localhost");
         extent.setSystemInfo("Environment", "QA");
-        extent.setSystemInfo("User", System.getProperty("user.name"));
 
         htmlReporter.config().setDocumentTitle("Selenium Automation Test Project"); // Tile of report
         htmlReporter.config().setReportName("Functional Test Automation Report"); // name of the report
