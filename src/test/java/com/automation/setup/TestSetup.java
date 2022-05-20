@@ -28,8 +28,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TestSetup {
-    public static ResourceHelper config = new ResourceHelper().getResource("config");
-    private static final ThreadLocal<RemoteWebDriver> driverThread = new ThreadLocal<>();
+    static ResourceHelper config = new ResourceHelper().getResource("config");
+    static ThreadLocal<RemoteWebDriver> driverThread = new ThreadLocal<>();
 
     public static RemoteWebDriver getCurrentDriver() {
         return driverThread.get();
