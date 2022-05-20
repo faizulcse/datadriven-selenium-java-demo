@@ -87,7 +87,7 @@ public class TestSetup implements AppData {
     }
 
     public static String updateTcName(String name) {
-        String tcName = name + "[" + getBrowserType() + "]";
+        String tcName = name + "[" + getBrowserType().toUpperCase() + "]";
         int i = Collections.frequency(list, tcName);
         list.add(tcName);
         return i > 0 ? tcName + "_" + i : tcName;
