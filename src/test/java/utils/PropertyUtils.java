@@ -12,4 +12,16 @@ public class PropertyUtils {
     public static int getInteger(String key) {
         return Integer.parseInt(System.getProperty(key));
     }
+
+    public static String set(String key, String value) {
+        return System.setProperty(key, value);
+    }
+
+    public static String set(String key, int value) {
+        return System.setProperty(key, String.valueOf(value));
+    }
+
+    public static String set(String key, boolean value) {
+        return System.setProperty(key, String.valueOf(value));
+    }
 }
