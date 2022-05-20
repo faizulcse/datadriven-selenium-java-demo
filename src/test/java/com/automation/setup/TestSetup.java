@@ -87,10 +87,10 @@ public class TestSetup implements AppData {
     }
 
     public static String updateTcName(String name) {
-        int i = Collections.frequency(list, name);
-        list.add(name);
-        return i > 0 ? name + "[" + getBrowserType() + "]" + "_ " + i : name;
-//        return i > 0 ? name + "[" + getBrowserType() + "]" + "_ " + i : name;
+        String tcName = name + "[" + getBrowserType() + "]";
+        int i = Collections.frequency(list, tcName);
+        list.add(tcName);
+        return i > 0 ? tcName + "_" + i : tcName;
     }
 
     public static synchronized RemoteWebDriver getRemoteDriver(String browser) throws MalformedURLException {
