@@ -23,6 +23,7 @@ public class CustomReportListener extends TestListenerAdapter {
     public ExtentTest logger;
 
     public void onStart(ITestContext testContext) {
+        TestSetup.deleteAllScreenshot();
         htmlReporter = new ExtentHtmlReporter(AppData.EXTEND_REPORT);
         htmlReporter.loadXMLConfig(AppData.REPORT_CONFIG);
         extent = new ExtentReports();

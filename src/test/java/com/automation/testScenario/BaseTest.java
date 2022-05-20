@@ -16,11 +16,6 @@ public class BaseTest implements ITest {
     static ThreadLocal<String> testName = new ThreadLocal<>();
     static List<String> list = new ArrayList<>();
 
-    @BeforeSuite
-    public void beforeSuite() throws IOException {
-        TestSetup.deleteAllScreenshot();
-    }
-
     @Parameters({"browserType"})
     @BeforeMethod
     public void setUp(@Optional("chrome") String browser, Method method) throws MalformedURLException {

@@ -61,10 +61,14 @@ public class TestSetup {
         return screenshot;
     }
 
-    public static void deleteAllScreenshot() throws IOException {
-        for (File listOfFile : Objects.requireNonNull(new File(AppData.SCREENSHOT_DIR).listFiles())) {
-            if (listOfFile.getName().endsWith(".png"))
-                Files.deleteIfExists(Paths.get(String.valueOf(listOfFile)));
+    public static void deleteAllScreenshot() {
+        try {
+            for (File listOfFile : Objects.requireNonNull(new File(AppData.SCREENSHOT_DIR).listFiles())) {
+                if (listOfFile.getName().endsWith(".png"))
+                    Files.deleteIfExists(Paths.get(String.valueOf(listOfFile)));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
