@@ -13,15 +13,15 @@ public class PropertyUtils {
         return Integer.parseInt(System.getProperty(key));
     }
 
-    public static String set(String key, String value) {
+    public static String setProperty(String key, String value) {
         return System.setProperty(key, value);
     }
 
-    public static String set(String key, int value) {
+    public static String setProperty(String key, int value) {
         return System.setProperty(key, String.valueOf(value));
     }
 
-    public static String set(String key, boolean value) {
+    public static String setProperty(String key, boolean value) {
         return System.setProperty(key, String.valueOf(value));
     }
 }
