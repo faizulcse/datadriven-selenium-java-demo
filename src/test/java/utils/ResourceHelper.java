@@ -11,14 +11,14 @@ public class ResourceHelper {
     }
 
     public String getString(String key) {
-        return System.getProperty(key);
+        return bundle.getString(key);
     }
 
     public boolean getBoolean(String key) {
-        return Boolean.parseBoolean(System.getProperty(key));
+        return Boolean.parseBoolean(bundle.getString(key));
     }
 
     public int getInteger(String key) {
-        return Integer.parseInt(System.getProperty(key));
+        return Integer.parseInt(bundle.getString(key));
     }
 }
