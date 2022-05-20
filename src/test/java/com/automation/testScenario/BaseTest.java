@@ -13,8 +13,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class BaseTest implements ITest {
-    private static final ThreadLocal<String> testName = new ThreadLocal<>();
-    private static final List<String> list = new ArrayList<>();
+    static ThreadLocal<String> testName = new ThreadLocal<>();
+    static List<String> list = new ArrayList<>();
 
     @BeforeSuite
     public void beforeSuite() throws IOException {
@@ -38,7 +38,7 @@ public class BaseTest implements ITest {
         return testName.get();
     }
 
-    public static String dataDrivenTestName(String name) {
+    String dataDrivenTestName(String name) {
         int i = Collections.frequency(list, name);
         list.add(name);
         return i > 0 ? name + "_" + i : name;

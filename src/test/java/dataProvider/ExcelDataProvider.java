@@ -7,12 +7,12 @@ import utils.ExcelUtils;
 public class ExcelDataProvider {
     @DataProvider(name = "singleTripData")
     public static Object[][] getSingleTripData() {
-        return getExcelData(AppData.excelData, "SingleTrip");
+        return getExcelData(AppData.TEST_DATA_EXCEL, "SingleTrip");
     }
 
     @DataProvider(name = "roundTripData")
     public static Object[][] getRoundTripData() {
-        return getExcelData(AppData.excelData, "RoundTrip");
+        return getExcelData(AppData.TEST_DATA_EXCEL, "RoundTrip");
     }
 
     public static Object[][] getExcelData(String excelFile, String sheetName) {

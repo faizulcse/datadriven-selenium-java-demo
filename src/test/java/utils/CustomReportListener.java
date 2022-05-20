@@ -23,8 +23,8 @@ public class CustomReportListener extends TestListenerAdapter {
     public ExtentTest logger;
 
     public void onStart(ITestContext testContext) {
-        htmlReporter = new ExtentHtmlReporter(AppData.extendReportName);
-        htmlReporter.loadXMLConfig(AppData.reportConfig);
+        htmlReporter = new ExtentHtmlReporter(AppData.EXTEND_REPORT);
+        htmlReporter.loadXMLConfig(AppData.REPORT_CONFIG);
         extent = new ExtentReports();
 
         extent.attachReporter(htmlReporter);
@@ -45,7 +45,7 @@ public class CustomReportListener extends TestListenerAdapter {
 
         try {
             String screenShotName = TestSetup.takeScreenShot(tr.getName());
-            logger.pass(screenShotName, MediaEntityBuilder.createScreenCaptureFromPath(AppData.screenShotDir + screenShotName).build());
+            logger.pass(screenShotName, MediaEntityBuilder.createScreenCaptureFromPath(AppData.SCREENSHOT_DIR + screenShotName).build());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,7 +57,7 @@ public class CustomReportListener extends TestListenerAdapter {
 
         try {
             String screenShotName = TestSetup.takeScreenShot(tr.getName());
-            logger.fail(screenShotName, MediaEntityBuilder.createScreenCaptureFromPath(AppData.screenShotDir + screenShotName).build());
+            logger.fail(screenShotName, MediaEntityBuilder.createScreenCaptureFromPath(AppData.SCREENSHOT_DIR + screenShotName).build());
             logger.fail(tr.getThrowable().getLocalizedMessage());
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,12 +1,12 @@
 package utils;
 
-public class AppData {
-    public static String rootDir = System.getProperty("user.dir");
-    public static String reportDir = rootDir + "/reports/";
-    public static String extendReportName = reportDir + "Test-Report.html";
-    public static String reportConfig = rootDir + "/extent-config.xml";
-    public static String screenShotDir = rootDir + "/screenshot/";
-    public static String userData = rootDir + "/src/test/java/testData/csvData/users.csv";
-    public static String guestData = rootDir + "/src/test/java/testData/csvData/guests.csv";
-    public static String excelData = rootDir + "/src/test/java/testData/excelData/TestData.xlsx";
+public interface AppData {
+    String PROJECT_DIR = System.getProperty("user.dir");
+    String REPORT_DIR = System.getProperty("user.dir") + "/reports/";
+    String EXTEND_REPORT = System.getProperty("user.dir") + "/reports/Test-Report.html";
+    String REPORT_CONFIG = System.getProperty("user.dir") + "/extent-config.xml";
+    String SCREENSHOT_DIR = System.getProperty("user.dir") + "/screenshot/";
+    String USER_DATA_CSV = System.getProperty("user.dir") + "/src/test/java/testData/csvData/users.csv";
+    String GUEST_DATA_CSV = System.getProperty("user.dir") + "/src/test/java/testData/csvData/guests.csv";
+    String TEST_DATA_EXCEL = System.getProperty("user.dir") + "/src/test/java/testData/excelData/TestData.xlsx";
 }

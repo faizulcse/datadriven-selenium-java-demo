@@ -31,7 +31,7 @@ public class TestSetup {
     public static ResourceHelper config = new ResourceHelper().getResource("config");
     private static final ThreadLocal<RemoteWebDriver> driverThread = new ThreadLocal<>();
 
-    protected static RemoteWebDriver getCurrentDriver() {
+    public static RemoteWebDriver getCurrentDriver() {
         return driverThread.get();
     }
 
@@ -57,12 +57,12 @@ public class TestSetup {
     public static String takeScreenShot(String screenshotName) throws IOException {
         String screenshot = screenshotName + ".png";
         File screenshotFile = ((TakesScreenshot) getCurrentDriver()).getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(screenshotFile, new File(AppData.screenShotDir + screenshot));
+        FileUtils.copyFile(screenshotFile, new File(AppData.SCREENSHOT_DIR + screenshot));
         return screenshot;
     }
 
     public static void deleteAllScreenshot() throws IOException {
-        for (File listOfFile : Objects.requireNonNull(new File(AppData.screenShotDir).listFiles())) {
+        for (File listOfFile : Objects.requireNonNull(new File(AppData.SCREENSHOT_DIR).listFiles())) {
             if (listOfFile.getName().endsWith(".png"))
                 Files.deleteIfExists(Paths.get(String.valueOf(listOfFile)));
         }

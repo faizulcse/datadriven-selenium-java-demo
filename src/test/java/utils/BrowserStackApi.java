@@ -9,32 +9,20 @@ import org.openqa.selenium.remote.SessionId;
 
 import java.io.File;
 
-public class BrowserStackApi {
-    private static final String AUTOMATE_USERNAME = System.getenv("BROWSERSTACK_USERNAME");
-    private static final String AUTOMATE_ACCESS_KEY = System.getenv("BROWSERSTACK_ACCESS_KEY");
-    private static final String SERVER_URL = "https://" + AUTOMATE_USERNAME + ":" + AUTOMATE_ACCESS_KEY + "@hub-cloud.browserstack.com/wd/hub";
-    private static final String API_URL = "https://" + AUTOMATE_USERNAME + ":" + AUTOMATE_ACCESS_KEY + "@api-cloud.browserstack.com";
+public class BrowserStackApi implements BrowserStack {
 
-    private static final String DELETE_ENDPOINT = "/app-automate/app/delete/";
-    private static final String UPLOAD_ENDPOINT = "/app-automate/upload";
-    private static final String RECENT_ENDPOINT = "/app-automate/recent_apps/";
-    private static final String SESSION_ENDPOINT = "/app-automate/sessions/";
-
-    private static final String PASSED_MESSAGE = "All steps passed!";
-    private static final String FAILED_MESSAGE = "Test execution failed!";
-
-    public static void setTestAsPassed(SessionId id) {
+    public static void setTestAsPassed(SessionId id, String message) {
         JsonObject payload = new JsonObject();
         payload.addProperty("status", "PASSED");
-        payload.addProperty("reason", PASSED_MESSAGE);
+        payload.addProperty("reason", message);
         String status = new Gson().toJson(payload);
         setTestStatus(id, status);
     }
 
-    public static void setTestAsFailed(SessionId id) {
+    public static void setTestAsFailed(SessionId id, String message) {
         JsonObject payload = new JsonObject();
         payload.addProperty("status", "FAILED");
-        payload.addProperty("reason", FAILED_MESSAGE);
+        payload.addProperty("reason", message);
         String status = new Gson().toJson(payload);
         setTestStatus(id, status);
     }
@@ -43,7 +31,7 @@ public class BrowserStackApi {
         RestAssured.given()
                 .contentType("application/json")
                 .body(status)
-                .put(API_URL + SESSION_ENDPOINT + id + ".json")
+                .put(SESSION_API + id + ".json")
                 .then()
                 .assertThat()
                 .statusCode(200);
@@ -55,25 +43,25 @@ public class BrowserStackApi {
                 .contentType("multipart/form-data")
                 .multiPart("file", new File(appPath))
                 .formParam("custom_id", customId)
-                .post(API_URL + UPLOAD_ENDPOINT);
+                .post(UPLOAD_API);
         res.then().assertThat().statusCode(200);
         return new Gson().fromJson(res.asString(), JsonObject.class).get("app_url").getAsString();
     }
 
     public static void deleteAppFromBs(String appId) {
         RestAssured.given()
-                .delete(API_URL + DELETE_ENDPOINT + appId)
+                .delete(DELETE_API + appId)
                 .then()
                 .assertThat()
                 .statusCode(200);
     }
 
     public static Response getRecentApps() {
-        return recentApp(API_URL + RECENT_ENDPOINT);
+        return recentApp(RECENT_API);
     }
 
     public static String getRecentApp(String customId) {
-        Response res = recentApp(API_URL + RECENT_ENDPOINT + customId);
+        Response res = recentApp(RECENT_API + customId);
         try {
             return new Gson().fromJson(res.asString(), JsonArray.class).get(0).getAsJsonObject().get("app_url").getAsString();
         } catch (Exception ignored) {
