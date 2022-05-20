@@ -25,7 +25,7 @@ public class BaseTest implements ITest {
     @BeforeMethod
     public void setUp(@Optional("chrome") String browser, Method method) throws MalformedURLException {
         TestSetup.startDriver(browser);
-        testName.set(setDataDrivenTestName(method.getName()));
+        testName.set(dataDrivenTestName(method.getName()));
     }
 
     @AfterMethod
@@ -38,7 +38,7 @@ public class BaseTest implements ITest {
         return testName.get();
     }
 
-    public static String setDataDrivenTestName(String name) {
+    public static String dataDrivenTestName(String name) {
         int i = Collections.frequency(list, name);
         list.add(name);
         return i > 0 ? name + "_" + i : name;
