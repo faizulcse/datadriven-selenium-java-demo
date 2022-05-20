@@ -1,6 +1,10 @@
 package utils;
 
 public class PropertyUtils {
+    public static String getProperty(String key) {
+        return System.getProperty(key);
+    }
+
     public static String getString(String key) {
         return System.getProperty(key);
     }
