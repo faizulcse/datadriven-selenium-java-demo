@@ -41,7 +41,7 @@ public class CustomReportListener extends TestListenerAdapter {
     }
 
     public void onTestSuccess(ITestResult tr) {
-        String testName = "[✗]" + tr.getName();
+        String testName = "[✓]" + tr.getName();
         logger = extent.createTest(tr.getName()); // create new entry in th report
         logger.log(Status.PASS, MarkupHelper.createLabel(tr.getName(), ExtentColor.GREEN)); // send the passed information to the report with GREEN color highlighted
 
@@ -54,7 +54,7 @@ public class CustomReportListener extends TestListenerAdapter {
     }
 
     public void onTestFailure(ITestResult tr) {
-        String testName = "[✓]" + tr.getName();
+        String testName = "[✗]" + tr.getName();
         logger = extent.createTest(tr.getName()); // create new entry in th report
         logger.log(Status.FAIL, MarkupHelper.createLabel(tr.getName(), ExtentColor.RED)); // send the passed information to the report with GREEN color highlighted
 
