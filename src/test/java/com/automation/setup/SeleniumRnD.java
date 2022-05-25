@@ -1,10 +1,7 @@
 package com.automation.setup;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -13,17 +10,33 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.time.Duration;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SeleniumRnD {
     public static WebDriver driver;
     public static int impWait = 20;
 
     @BeforeMethod
-    public void setUp() {
+    public void setUp() throws FileNotFoundException {
+        System.setErr(new PrintStream(new FileOutputStream("web-driver.log")));
+
         WebDriverManager.chromedriver().setup();
+        Map<String, Object> prefs = new HashMap<>();
+        prefs.put("profile.default_content_setting_values.notifications", 2);
+
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.setHeadless(true);
+        chromeOptions.setUnhandledPromptBehaviour(UnexpectedAlertBehaviour.IGNORE);
+        chromeOptions.setExperimentalOption("prefs", prefs);
+        chromeOptions.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
+        chromeOptions.setExperimentalOption("useAutomationExtension", true);
+
         driver = new ChromeDriver(chromeOptions);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(impWait));
     }
