@@ -20,7 +20,7 @@ import java.util.Map;
 
 public class SeleniumRnD {
     public static WebDriver driver;
-    public static int impWait = 20;
+    public static int impWait = 10;
 
     @BeforeMethod
     public void setUp() throws FileNotFoundException {
@@ -44,7 +44,7 @@ public class SeleniumRnD {
     @Test
     public void verifySeleniumWait() {
         driver.get("https://google.com");
-        WebElement searchField = waitForLoading(By.name("q"), 10);
+        WebElement searchField = waitForElementLoading(By.name("q"));
         System.out.println(searchField.isDisplayed());
         System.out.println(searchField.isEnabled());
         System.out.println(searchField.isSelected());
@@ -59,19 +59,23 @@ public class SeleniumRnD {
             driver.quit();
     }
 
-    public static WebElement waitForLoading(By by, int timeout) {
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
+    public static WebElement waitForElementLoading(By by) {
+        return waitForElementLoading(by, 30);
+    }
+
+    public static WebElement waitForElementLoading(By by, int timeout) {
         try {
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
             new FluentWait<>(driver)
                     .withTimeout(Duration.ofSeconds(timeout))
                     .pollingEvery(Duration.ofMillis(100))
                     .ignoring(NoSuchElementException.class)
-                    .withMessage("Element not found: " + by.toString())
+                    .withMessage("Element not found. " + by.toString())
                     .until(driver -> driver.findElements(by).size() > 0);
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(impWait));
         } catch (Exception e) {
             Assert.fail(e.getLocalizedMessage());
         }
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(impWait));
         return driver.findElement(by);
     }
 }
