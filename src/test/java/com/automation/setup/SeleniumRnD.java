@@ -25,7 +25,7 @@ public class SeleniumRnD {
 
     @BeforeMethod
     public void setUp() throws FileNotFoundException {
-        System.setErr(new PrintStream(new FileOutputStream("web-driver.log")));
+        System.setErr(new PrintStream(new FileOutputStream("web-driver.log", true)));
 
         WebDriverManager.chromedriver().setup();
         Map<String, Object> prefs = new HashMap<>();
