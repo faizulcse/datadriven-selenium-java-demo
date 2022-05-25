@@ -21,6 +21,7 @@ import java.util.Map;
 public class SeleniumRnD {
     public static WebDriver driver;
     public static int impWait = 10;
+    static int i = 1;
 
     @BeforeMethod
     public void setUp() throws FileNotFoundException {
@@ -44,7 +45,7 @@ public class SeleniumRnD {
     @Test
     public void verifySeleniumWait() {
         driver.get("https://google.com");
-        WebElement searchField = waitForElementLoading(By.name("q"));
+        WebElement searchField = waitUntilElementLoading(By.name("qs"));
         System.out.println(searchField.isDisplayed());
         System.out.println(searchField.isEnabled());
         System.out.println(searchField.isSelected());
@@ -53,17 +54,18 @@ public class SeleniumRnD {
         System.out.println(searchField.getAccessibleName());
     }
 
+
     @AfterMethod
     public void tearDown() {
         if (driver != null)
             driver.quit();
     }
 
-    public static WebElement waitForElementLoading(By by) {
-        return waitForElementLoading(by, 30);
+    public static WebElement waitUntilElementLoading(By by) {
+        return waitUntilElementLoading(by, 30);
     }
 
-    public static WebElement waitForElementLoading(By by, int timeout) {
+    public static WebElement waitUntilElementLoading(By by, int timeout) {
         try {
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
             new FluentWait<>(driver)
