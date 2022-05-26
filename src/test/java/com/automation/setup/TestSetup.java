@@ -15,8 +15,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import utils.AppData;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -26,21 +25,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class TestSetup implements AppData {
     static ThreadLocal<RemoteWebDriver> driverThread = new ThreadLocal<>();
-    static ThreadLocal<String> browserType = new ThreadLocal<>();
     static List<String> list = new ArrayList<>();
-
-    public static String getBrowserType() {
-        return browserType.get();
-    }
-
-    public static void setBrowserType(String name) {
-        browserType.set(name == null ? BROWSER_SETTINGS.getString("browser") : name);
-    }
 
     public static RemoteWebDriver getCurrentDriver() {
         return driverThread.get();
@@ -50,17 +38,18 @@ public class TestSetup implements AppData {
         driverThread.set(driver);
     }
 
-    public static synchronized void startDriver(String browser) {
-        Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
+    public static synchronized void startDriver(String browserType) {
+        String browser = browserType == null ? BROWSER_SETTINGS.getString("browser") : browserType;
         try {
-            setBrowserType(browser);
-            RemoteWebDriver driver = BROWSER_SETTINGS.getBoolean("remote") ? getRemoteDriver(getBrowserType()) : getLocalDriver(getBrowserType());
+            System.setErr(new PrintStream(new FileOutputStream("web-driver.log", true)));
+            RemoteWebDriver driver = getWebDriver(browser.toLowerCase());
             driver.manage().window().maximize();
             driver.manage().deleteAllCookies();
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(BROWSER_SETTINGS.getInteger("wait")));
             driver.get(BROWSER_SETTINGS.getString("url"));
             setCurrentDriver(driver);
-        } catch (MalformedURLException ignored) {
+        } catch (MalformedURLException | FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -87,7 +76,7 @@ public class TestSetup implements AppData {
     }
 
     public static String updateTcName(String name) {
-        String tcName = name + "_[" + getBrowserType().toUpperCase() + "]";
+        String tcName = name + "_[" + getCurrentDriver().getCapabilities().getBrowserName() + "]";
         int i = Collections.frequency(list, tcName);
         list.add(tcName);
         return i > 0 ? tcName + "_" + i : tcName;
@@ -99,26 +88,31 @@ public class TestSetup implements AppData {
         return new RemoteWebDriver(new URL(BROWSER_SETTINGS.getString("hub")), caps);
     }
 
-    public static RemoteWebDriver getLocalDriver(String browser) {
-        switch (browser.toLowerCase()) {
+    public static RemoteWebDriver getWebDriver(String browser) throws MalformedURLException {
+        boolean isRemote = BROWSER_SETTINGS.getBoolean("remote");
+        switch (browser) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = new ChromeOptions();
                 chromeOptions.setHeadless(BROWSER_SETTINGS.getBoolean("headless"));
-                return new ChromeDriver(chromeOptions);
+                return isRemote ? getRemoteDriver(browser) : new ChromeDriver(chromeOptions);
+
             case "opera":
                 WebDriverManager.operadriver().setup();
-                return new OperaDriver();
+                return isRemote ? getRemoteDriver(browser) : new OperaDriver();
+
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
                 firefoxOptions.setHeadless(BROWSER_SETTINGS.getBoolean("headless"));
-                return new FirefoxDriver(firefoxOptions);
+                return isRemote ? getRemoteDriver(browser) : new FirefoxDriver(firefoxOptions);
+
             case "edge":
                 WebDriverManager.edgedriver().setup();
                 EdgeOptions edgeOptions = new EdgeOptions();
                 edgeOptions.setHeadless(BROWSER_SETTINGS.getBoolean("headless"));
-                return new EdgeDriver(edgeOptions);
+                return isRemote ? getRemoteDriver(browser) : new EdgeDriver(edgeOptions);
+
             default:
                 throw new RuntimeException("Error! Please enter a valid browser [" + browser + "]");
         }
