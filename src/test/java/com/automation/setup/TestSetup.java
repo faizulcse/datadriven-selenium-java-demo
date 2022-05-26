@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TestSetup implements AppData {
     static ThreadLocal<RemoteWebDriver> driverThread = new ThreadLocal<>();
@@ -38,17 +40,18 @@ public class TestSetup implements AppData {
         driverThread.set(driver);
     }
 
-    public static synchronized void startDriver(String browserType) {
+    public static synchronized void startDriver(String browserType) throws FileNotFoundException {
+        Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
+        System.setErr(new PrintStream(new FileOutputStream("web-driver.log", true)));
         String browser = browserType == null ? BROWSER_SETTINGS.getString("browser") : browserType;
         try {
-            System.setErr(new PrintStream(new FileOutputStream("web-driver.log", true)));
             RemoteWebDriver driver = getWebDriver(browser.toLowerCase());
             driver.manage().window().maximize();
             driver.manage().deleteAllCookies();
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(BROWSER_SETTINGS.getInteger("wait")));
             driver.get(BROWSER_SETTINGS.getString("url"));
             setCurrentDriver(driver);
-        } catch (MalformedURLException | FileNotFoundException e) {
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
     }

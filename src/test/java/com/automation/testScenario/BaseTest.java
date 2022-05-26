@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
+import java.io.FileNotFoundException;
 import java.lang.reflect.Method;
 
 public class BaseTest implements ITest {
@@ -15,7 +16,7 @@ public class BaseTest implements ITest {
 
     @Parameters({"browserType"})
     @BeforeMethod
-    public void setUp(@Optional() String browser, Method method) {
+    public void setUp(@Optional() String browser, Method method) throws FileNotFoundException {
         TestSetup.startDriver(browser);
         testName.set(TestSetup.updateTcName(method.getName()));
     }
@@ -27,6 +28,6 @@ public class BaseTest implements ITest {
 
     @Override
     public String getTestName() {
-        return testName.get();
+        return testName.get() != null ? testName.get() : "";
     }
 }
