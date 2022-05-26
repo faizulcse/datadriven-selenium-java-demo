@@ -9,7 +9,5 @@ public interface AppData {
     String USER_DATA_CSV = System.getProperty("user.dir") + "/src/test/java/testData/csvData/users.csv";
     String GUEST_DATA_CSV = System.getProperty("user.dir") + "/src/test/java/testData/csvData/guests.csv";
     String TEST_DATA_EXCEL = System.getProperty("user.dir") + "/src/test/java/testData/excelData/TestData.xlsx";
-    ResourceHelper BROWSER_SETTINGS = new ResourceHelper().getResource("browser_settings");
-    ResourceHelper ANDROID_SETTINGS = new ResourceHelper().getResource("android_settings");
-    ResourceHelper IOS_SETTINGS = new ResourceHelper().getResource("ios_settings");
+    ResourceHelper SETTINGS = new ResourceHelper().getResource("settings");
 }

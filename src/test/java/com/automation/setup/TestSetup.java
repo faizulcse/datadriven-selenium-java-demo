@@ -43,13 +43,13 @@ public class TestSetup implements AppData {
     public static synchronized void startDriver(String browserType) throws FileNotFoundException {
         Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
         System.setErr(new PrintStream(new FileOutputStream("web-driver.log", true)));
-        String browser = browserType == null ? BROWSER_SETTINGS.getString("browser") : browserType;
+        String browser = browserType == null ? SETTINGS.getString("browser") : browserType;
         try {
             RemoteWebDriver driver = getWebDriver(browser.toLowerCase());
             driver.manage().window().maximize();
             driver.manage().deleteAllCookies();
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(BROWSER_SETTINGS.getInteger("wait")));
-            driver.get(BROWSER_SETTINGS.getString("url"));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(SETTINGS.getInteger("wait")));
+            driver.get(SETTINGS.getString("url"));
             setCurrentDriver(driver);
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -88,16 +88,16 @@ public class TestSetup implements AppData {
     public static synchronized RemoteWebDriver getRemoteDriver(String browser) throws MalformedURLException {
         DesiredCapabilities caps = new DesiredCapabilities();
         caps.setBrowserName(browser);
-        return new RemoteWebDriver(new URL(BROWSER_SETTINGS.getString("hub")), caps);
+        return new RemoteWebDriver(new URL(SETTINGS.getString("hub")), caps);
     }
 
     public static RemoteWebDriver getWebDriver(String browser) throws MalformedURLException {
-        boolean isRemote = BROWSER_SETTINGS.getBoolean("remote");
+        boolean isRemote = SETTINGS.getBoolean("remote");
         switch (browser) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = new ChromeOptions();
-                chromeOptions.setHeadless(BROWSER_SETTINGS.getBoolean("headless"));
+                chromeOptions.setHeadless(SETTINGS.getBoolean("headless"));
                 return isRemote ? getRemoteDriver(browser) : new ChromeDriver(chromeOptions);
 
             case "opera":
@@ -107,13 +107,13 @@ public class TestSetup implements AppData {
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
-                firefoxOptions.setHeadless(BROWSER_SETTINGS.getBoolean("headless"));
+                firefoxOptions.setHeadless(SETTINGS.getBoolean("headless"));
                 return isRemote ? getRemoteDriver(browser) : new FirefoxDriver(firefoxOptions);
 
             case "edge":
                 WebDriverManager.edgedriver().setup();
                 EdgeOptions edgeOptions = new EdgeOptions();
-                edgeOptions.setHeadless(BROWSER_SETTINGS.getBoolean("headless"));
+                edgeOptions.setHeadless(SETTINGS.getBoolean("headless"));
                 return isRemote ? getRemoteDriver(browser) : new EdgeDriver(edgeOptions);
 
             default:
