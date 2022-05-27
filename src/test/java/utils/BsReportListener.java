@@ -1,12 +1,13 @@
 package utils;
 
 import com.automation.setup.DriverManager;
-import com.automation.setup.TestSetup;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 
-public class BrowserStackReportListener extends TestListenerAdapter {
+public class BsReportListener extends TestListenerAdapter {
+    BrowserStackUtils bsUtils = new BrowserStackUtils();
+
     @Override
     public void onStart(ITestContext testContext) {
         super.onStart(testContext);
@@ -20,19 +21,19 @@ public class BrowserStackReportListener extends TestListenerAdapter {
     @Override
     public void onTestSuccess(ITestResult tr) {
         super.onTestSuccess(tr);
-        BrowserStackApi.setTestAsPassed(DriverManager.getCurrentDriver().getSessionId(), BrowserStack.PASSED_MESSAGE);
+        bsUtils.setTestAsPassed(DriverManager.getCurrentDriver().getSessionId());
     }
 
     @Override
     public void onTestFailure(ITestResult tr) {
         super.onTestFailure(tr);
-        BrowserStackApi.setTestAsFailed(DriverManager.getCurrentDriver().getSessionId(), tr.getThrowable().getLocalizedMessage());
+        bsUtils.setTestAsFailed(DriverManager.getCurrentDriver().getSessionId(), tr.getThrowable().getLocalizedMessage());
     }
 
     @Override
     public void onTestSkipped(ITestResult tr) {
         super.onTestSkipped(tr);
-        BrowserStackApi.setTestAsFailed(DriverManager.getCurrentDriver().getSessionId(), tr.getSkipCausedBy().toString());
+        bsUtils.setTestAsFailed(DriverManager.getCurrentDriver().getSessionId(), tr.getSkipCausedBy().toString());
     }
 
     @Override

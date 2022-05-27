@@ -1,5 +1,8 @@
 package utils;
 
+import io.restassured.response.Response;
+import org.openqa.selenium.remote.SessionId;
+
 public interface BrowserStack {
     String USERNAME = System.getenv("BROWSERSTACK_USERNAME");
     String ACCESS_KEY = System.getenv("BROWSERSTACK_ACCESS_KEY");
@@ -13,4 +16,26 @@ public interface BrowserStack {
     String SESSION_API = API_URL + "/app-automate/sessions/";
     String PASSED_MESSAGE = "All steps passed!";
     String FAILED_MESSAGE = "Test execution failed!";
+
+    void setTestAsPassed(SessionId id);
+
+    void setTestAsFailed(SessionId id, String message);
+
+    void setTestStatus(SessionId id, String status);
+
+    String uploadAppToBs(String appPath, String customId);
+
+    void deleteAppFromBs(String appId);
+
+    Response getRecentApps();
+
+    String getRecentApp(String customId);
+
+    Response recentApp(String apiUrl);
+
+    void enableLocalTesting();
+
+    boolean isLocalRunning();
+
+    void disableLocalTesting();
 }

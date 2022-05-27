@@ -1,18 +1,18 @@
 package dataProvider;
 
 import org.testng.annotations.DataProvider;
-import utils.AppData;
+import com.automation.setup.Automation;
 import utils.ExcelUtils;
 
 public class ExcelDataProvider {
     @DataProvider(name = "singleTripData")
     public static Object[][] getSingleTripData() {
-        return getExcelData(AppData.TEST_DATA_EXCEL, "SingleTrip");
+        return getExcelData(Automation.TEST_DATA_EXCEL, "SingleTrip");
     }
 
     @DataProvider(name = "roundTripData")
     public static Object[][] getRoundTripData() {
-        return getExcelData(AppData.TEST_DATA_EXCEL, "RoundTrip");
+        return getExcelData(Automation.TEST_DATA_EXCEL, "RoundTrip");
     }
 
     public static Object[][] getExcelData(String excelFile, String sheetName) {

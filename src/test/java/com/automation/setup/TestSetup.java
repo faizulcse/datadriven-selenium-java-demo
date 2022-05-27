@@ -1,9 +1,6 @@
 package com.automation.setup;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -13,71 +10,56 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import utils.AppData;
+import utils.ResourceHelper;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TestSetup implements AppData {
-    public static synchronized void startDriver(String browserType) {
+public class TestSetup implements Automation {
+    public ResourceHelper settings = new ResourceHelper().getResource("settings");
+
+    public synchronized RemoteWebDriver startDriver(String browser) {
         try {
             Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
             System.setErr(new PrintStream(new FileOutputStream("web-driver.log", true)));
-            String browser = browserType == null ? SETTINGS.getString("browser") : browserType;
-
-            RemoteWebDriver driver = getWebDriver(browser.toLowerCase());
-            driver.manage().window().maximize();
-            driver.manage().deleteAllCookies();
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(SETTINGS.getInteger("wait")));
-            driver.get(SETTINGS.getString("url"));
-            DriverManager.setCurrentDriver(driver);
-        } catch (MalformedURLException | FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        RemoteWebDriver driver = getWebDriver(browser.toLowerCase());
+        driver.manage().window().maximize();
+        driver.manage().deleteAllCookies();
+        return driver;
     }
 
-    public static synchronized void stopDriver() {
+    public synchronized void stopDriver() {
         DriverManager.getCurrentDriver().quit();
     }
 
-    public static String takeScreenShot(String screenshotName) throws IOException {
-        String screenshot = screenshotName + ".png";
-        File screenshotFile = ((TakesScreenshot) DriverManager.getCurrentDriver()).getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(screenshotFile, new File(SCREENSHOT_DIR + screenshot));
-        return screenshot;
-    }
 
-    public static void deleteAllScreenshot() {
+    private RemoteWebDriver getRemoteDriver(String browser) {
         try {
-            for (File listOfFile : Objects.requireNonNull(new File(SCREENSHOT_DIR).listFiles())) {
-                if (listOfFile.getName().endsWith(".png"))
-                    Files.deleteIfExists(Paths.get(String.valueOf(listOfFile)));
-            }
-        } catch (IOException e) {
+            DesiredCapabilities caps = new DesiredCapabilities();
+            caps.setBrowserName(browser);
+            return new RemoteWebDriver(new URL(settings.getString("hub")), caps);
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
-    public static synchronized RemoteWebDriver getRemoteDriver(String browser) throws MalformedURLException {
-        DesiredCapabilities caps = new DesiredCapabilities();
-        caps.setBrowserName(browser);
-        return new RemoteWebDriver(new URL(SETTINGS.getString("hub")), caps);
-    }
-
-    public static RemoteWebDriver getWebDriver(String browser) throws MalformedURLException {
-        boolean isRemote = SETTINGS.getBoolean("remote");
+    private RemoteWebDriver getWebDriver(String browser) {
+        boolean isRemote = settings.getBool("remote");
         switch (browser) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = new ChromeOptions();
-                chromeOptions.setHeadless(SETTINGS.getBoolean("headless"));
+                chromeOptions.setHeadless(settings.getBool("headless"));
                 return isRemote ? getRemoteDriver(browser) : new ChromeDriver(chromeOptions);
 
             case "opera":
@@ -87,13 +69,13 @@ public class TestSetup implements AppData {
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
-                firefoxOptions.setHeadless(SETTINGS.getBoolean("headless"));
+                firefoxOptions.setHeadless(settings.getBool("headless"));
                 return isRemote ? getRemoteDriver(browser) : new FirefoxDriver(firefoxOptions);
 
             case "edge":
                 WebDriverManager.edgedriver().setup();
                 EdgeOptions edgeOptions = new EdgeOptions();
-                edgeOptions.setHeadless(SETTINGS.getBoolean("headless"));
+                edgeOptions.setHeadless(settings.getBool("headless"));
                 return isRemote ? getRemoteDriver(browser) : new EdgeDriver(edgeOptions);
 
             default:
