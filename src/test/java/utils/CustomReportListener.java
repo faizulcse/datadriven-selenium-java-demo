@@ -61,8 +61,7 @@ public class CustomReportListener extends TestListenerAdapter {
         logger.log(Status.PASS, MarkupHelper.createLabel(tr.getName(), ExtentColor.GREEN)); // send the passed information to the report with GREEN color highlighted
 
         try {
-            String screenShotName = TestSetup.takeScreenShot(tr.getName());
-            logger.pass(screenShotName, MediaEntityBuilder.createScreenCaptureFromPath(AppData.SCREENSHOT_DIR + screenShotName).build());
+            logger.pass("Screenshot:", MediaEntityBuilder.createScreenCaptureFromPath(AppData.SCREENSHOT_DIR + TestSetup.takeScreenShot(tr.getName())).build());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -74,9 +73,8 @@ public class CustomReportListener extends TestListenerAdapter {
         logger.log(Status.FAIL, MarkupHelper.createLabel(tr.getName(), ExtentColor.RED)); // send the passed information to the report with GREEN color highlighted
 
         try {
-            String screenShotName = TestSetup.takeScreenShot(tr.getName());
-            logger.fail(screenShotName, MediaEntityBuilder.createScreenCaptureFromPath(AppData.SCREENSHOT_DIR + screenShotName).build());
-            logger.fail(tr.getThrowable().getLocalizedMessage());
+            logger.error(tr.getThrowable());
+            logger.fail("Screenshot:", MediaEntityBuilder.createScreenCaptureFromPath(AppData.SCREENSHOT_DIR + TestSetup.takeScreenShot(tr.getName())).build());
         } catch (IOException e) {
             e.printStackTrace();
         }
