@@ -1,5 +1,6 @@
 package utils;
 
+import com.automation.setup.DriverManager;
 import com.automation.setup.TestSetup;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -15,15 +16,18 @@ import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 public class CustomReportListener extends TestListenerAdapter {
+    List<String> list = new ArrayList<>();
     public ExtentHtmlReporter htmlReporter;
     public ExtentReports extent;
     public ExtentTest logger;
 
     public void onStart(ITestContext testContext) {
-        TestSetup.deleteAllScreenshot();
         htmlReporter = new ExtentHtmlReporter(AppData.EXTEND_REPORT);
         htmlReporter.loadXMLConfig(AppData.REPORT_CONFIG);
         extent = new ExtentReports();
@@ -38,6 +42,16 @@ public class CustomReportListener extends TestListenerAdapter {
         htmlReporter.config().setReportName("Functional Test Automation Report"); // name of the report
         htmlReporter.config().setTestViewChartLocation(ChartLocation.TOP); //location of the chart
         htmlReporter.config().setTheme(Theme.DARK);
+    }
+
+    @Override
+    public void onTestStart(ITestResult result) {
+        String browser = DriverManager.getCurrentDriver().getCapabilities().getBrowserName();
+        String tc = result.getName() + "_[" + browser + "]";
+        int i = Collections.frequency(list, tc);
+        list.add(tc);
+        tc = i > 0 ? tc + "_" + i : tc;
+        result.setTestName(tc);
     }
 
     public void onTestSuccess(ITestResult tr) {
