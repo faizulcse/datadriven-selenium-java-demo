@@ -21,48 +21,35 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TestSetup implements AppData {
-    static ThreadLocal<RemoteWebDriver> driverThread = new ThreadLocal<>();
-    static List<String> list = new ArrayList<>();
-
-    public static RemoteWebDriver getCurrentDriver() {
-        return driverThread.get();
-    }
-
-    private static void setCurrentDriver(RemoteWebDriver driver) {
-        driverThread.set(driver);
-    }
-
-    public static synchronized void startDriver(String browserType) throws FileNotFoundException {
-        Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
-        System.setErr(new PrintStream(new FileOutputStream("web-driver.log", true)));
-        String browser = browserType == null ? SETTINGS.getString("browser") : browserType;
+    public static synchronized void startDriver(String browserType) {
         try {
+            Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
+            System.setErr(new PrintStream(new FileOutputStream("web-driver.log", true)));
+            String browser = browserType == null ? SETTINGS.getString("browser") : browserType;
+
             RemoteWebDriver driver = getWebDriver(browser.toLowerCase());
             driver.manage().window().maximize();
             driver.manage().deleteAllCookies();
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(SETTINGS.getInteger("wait")));
             driver.get(SETTINGS.getString("url"));
-            setCurrentDriver(driver);
-        } catch (MalformedURLException e) {
+            DriverManager.setCurrentDriver(driver);
+        } catch (MalformedURLException | FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     public static synchronized void stopDriver() {
-        getCurrentDriver().quit();
+        DriverManager.getCurrentDriver().quit();
     }
 
     public static String takeScreenShot(String screenshotName) throws IOException {
         String screenshot = screenshotName + ".png";
-        File screenshotFile = ((TakesScreenshot) getCurrentDriver()).getScreenshotAs(OutputType.FILE);
+        File screenshotFile = ((TakesScreenshot) DriverManager.getCurrentDriver()).getScreenshotAs(OutputType.FILE);
         FileUtils.copyFile(screenshotFile, new File(SCREENSHOT_DIR + screenshot));
         return screenshot;
     }
@@ -76,13 +63,6 @@ public class TestSetup implements AppData {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static String updateTcName(String name) {
-        String tcName = name + "_[" + getCurrentDriver().getCapabilities().getBrowserName() + "]";
-        int i = Collections.frequency(list, tcName);
-        list.add(tcName);
-        return i > 0 ? tcName + "_" + i : tcName;
     }
 
     public static synchronized RemoteWebDriver getRemoteDriver(String browser) throws MalformedURLException {
