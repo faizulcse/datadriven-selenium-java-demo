@@ -47,7 +47,8 @@ public class CustomReportListener extends TestListenerAdapter {
     @Override
     public void onTestStart(ITestResult result) {
         String browser = DriverManager.getCurrentDriver().getCapabilities().getBrowserName();
-        String tc = result.getName() + "_[" + browser + "]";
+        String osName = System.getProperty("os.name").split("\\s")[0];
+        String tc = result.getName() + "[" + browser + "_" + osName + "]";
         int i = Collections.frequency(list, tc);
         list.add(tc);
         tc = i > 0 ? tc + "_" + i : tc;
@@ -55,12 +56,12 @@ public class CustomReportListener extends TestListenerAdapter {
     }
 
     public void onTestSuccess(ITestResult tr) {
-        String testName = "[✓]" + tr.getName();
+        tr.setTestName("[✓]" + tr.getName());
         logger = extent.createTest(tr.getName()); // create new entry in th report
         logger.log(Status.PASS, MarkupHelper.createLabel(tr.getName(), ExtentColor.GREEN)); // send the passed information to the report with GREEN color highlighted
 
         try {
-            String screenShotName = TestSetup.takeScreenShot(testName);
+            String screenShotName = TestSetup.takeScreenShot(tr.getName());
             logger.pass(screenShotName, MediaEntityBuilder.createScreenCaptureFromPath(AppData.SCREENSHOT_DIR + screenShotName).build());
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,12 +69,12 @@ public class CustomReportListener extends TestListenerAdapter {
     }
 
     public void onTestFailure(ITestResult tr) {
-        String testName = "[✗]" + tr.getName();
+        tr.setTestName("[✗]" + tr.getName());
         logger = extent.createTest(tr.getName()); // create new entry in th report
         logger.log(Status.FAIL, MarkupHelper.createLabel(tr.getName(), ExtentColor.RED)); // send the passed information to the report with GREEN color highlighted
 
         try {
-            String screenShotName = TestSetup.takeScreenShot(testName);
+            String screenShotName = TestSetup.takeScreenShot(tr.getName());
             logger.fail(screenShotName, MediaEntityBuilder.createScreenCaptureFromPath(AppData.SCREENSHOT_DIR + screenShotName).build());
             logger.fail(tr.getThrowable().getLocalizedMessage());
         } catch (IOException e) {
