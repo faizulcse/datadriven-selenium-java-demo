@@ -11,7 +11,9 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 import utils.ResourceHelper;
 
-import java.time.Duration;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 
 public class BaseTest {
     ResourceHelper settings = new ResourceHelper().getResource("settings");
@@ -19,17 +21,18 @@ public class BaseTest {
 
     @Parameters({"browserType"})
     @BeforeMethod
-    public void setUp(@Optional() String browserType) {
+    public void setUp(@Optional() String browserType) throws FileNotFoundException {
+        System.setErr(new PrintStream(new FileOutputStream("web-driver.log", true)));
         String browser = browserType == null ? settings.getString("browser") : browserType;
+
         RemoteWebDriver driver = testSetup.startDriver(browser);
         DriverManager.setCurrentDriver(driver);
         DriverManager.getCurrentDriver().get(settings.getString("url"));
-
     }
 
     @AfterMethod
     public void tearDown(ITestResult result) {
         FileHelper.takeScreenShot(DriverManager.getCurrentDriver(), result.getName());
-        testSetup.stopDriver();
+        testSetup.stopDriver(DriverManager.getCurrentDriver());
     }
 }

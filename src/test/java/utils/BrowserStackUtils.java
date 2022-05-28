@@ -15,6 +15,27 @@ public class BrowserStackUtils implements BrowserStack {
     private static Local local;
 
     @Override
+    public String uploadAppToBs(String appPath, String customId) {
+        System.out.println("App Uploading(" + appPath + ")...");
+        Response res = RestAssured.given()
+                .contentType("multipart/form-data")
+                .multiPart("file", new File(appPath))
+                .formParam("custom_id", customId)
+                .post(UPLOAD_API);
+        res.then().assertThat().statusCode(200);
+        return new Gson().fromJson(res.asString(), JsonObject.class).get("app_url").getAsString();
+    }
+
+    @Override
+    public void deleteAppFromBs(String appId) {
+        RestAssured.given()
+                .delete(DELETE_API + appId)
+                .then()
+                .assertThat()
+                .statusCode(200);
+    }
+
+    @Override
     public void setTestAsPassed(SessionId id) {
         JsonObject payload = new JsonObject();
         payload.addProperty("status", "PASSED");
@@ -32,33 +53,11 @@ public class BrowserStackUtils implements BrowserStack {
         setTestStatus(id, status);
     }
 
-    @Override
-    public void setTestStatus(SessionId id, String status) {
+    private void setTestStatus(SessionId id, String status) {
         RestAssured.given()
                 .contentType("application/json")
                 .body(status)
                 .put(SESSION_API + id + ".json")
-                .then()
-                .assertThat()
-                .statusCode(200);
-    }
-
-    @Override
-    public String uploadAppToBs(String appPath, String customId) {
-        System.out.println("App Uploading(" + appPath + ")...");
-        Response res = RestAssured.given()
-                .contentType("multipart/form-data")
-                .multiPart("file", new File(appPath))
-                .formParam("custom_id", customId)
-                .post(UPLOAD_API);
-        res.then().assertThat().statusCode(200);
-        return new Gson().fromJson(res.asString(), JsonObject.class).get("app_url").getAsString();
-    }
-
-    @Override
-    public void deleteAppFromBs(String appId) {
-        RestAssured.given()
-                .delete(DELETE_API + appId)
                 .then()
                 .assertThat()
                 .statusCode(200);
@@ -83,8 +82,7 @@ public class BrowserStackUtils implements BrowserStack {
         }
     }
 
-    @Override
-    public Response recentApp(String apiUrl) {
+    private Response recentApp(String apiUrl) {
         return RestAssured.given()
                 .contentType("application/json")
                 .get(apiUrl);

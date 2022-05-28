@@ -12,33 +12,21 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import utils.ResourceHelper;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.Duration;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class TestSetup implements Automation {
     public ResourceHelper settings = new ResourceHelper().getResource("settings");
 
     public synchronized RemoteWebDriver startDriver(String browser) {
-        try {
-            Logger.getLogger("org.openqa.selenium").setLevel(Level.OFF);
-            System.setErr(new PrintStream(new FileOutputStream("web-driver.log", true)));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
         RemoteWebDriver driver = getWebDriver(browser.toLowerCase());
         driver.manage().window().maximize();
         driver.manage().deleteAllCookies();
         return driver;
     }
 
-    public synchronized void stopDriver() {
-        DriverManager.getCurrentDriver().quit();
+    public synchronized void stopDriver(RemoteWebDriver driver) {
+        driver.quit();
     }
 
 

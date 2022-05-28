@@ -17,21 +17,17 @@ public interface BrowserStack {
     String PASSED_MESSAGE = "All steps passed!";
     String FAILED_MESSAGE = "Test execution failed!";
 
-    void setTestAsPassed(SessionId id);
-
-    void setTestAsFailed(SessionId id, String message);
-
-    void setTestStatus(SessionId id, String status);
-
     String uploadAppToBs(String appPath, String customId);
 
     void deleteAppFromBs(String appId);
 
+    void setTestAsPassed(SessionId id);
+
+    void setTestAsFailed(SessionId id, String message);
+
     Response getRecentApps();
 
     String getRecentApp(String customId);
-
-    Response recentApp(String apiUrl);
 
     void enableLocalTesting();
 

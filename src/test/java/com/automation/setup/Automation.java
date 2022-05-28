@@ -14,5 +14,5 @@ public interface Automation {
 
     RemoteWebDriver startDriver(String browserType);
 
-    void stopDriver();
+    void stopDriver(RemoteWebDriver driver);
 }
