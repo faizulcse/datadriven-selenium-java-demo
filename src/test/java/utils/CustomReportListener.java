@@ -53,14 +53,12 @@ public class CustomReportListener extends TestListenerAdapter {
         list.add(tc);
         tc = i > 0 ? tc + "_" + i : tc;
         result.setTestName(tc);
-
-        // create new entry in th report
-        logger = extent.createTest(result.getName());
     }
 
     public void onTestSuccess(ITestResult tr) {
         try {
             String screenShotPath = FileHelper.takeScreenShot(DriverManager.getCurrentDriver(), tr.getName());
+            logger = extent.createTest(tr.getName());
             logger.log(Status.PASS, MarkupHelper.createLabel(tr.getName(), ExtentColor.GREEN));
             logger.pass("Screenshot:", MediaEntityBuilder.createScreenCaptureFromPath(screenShotPath).build());
         } catch (IOException e) {
@@ -71,6 +69,7 @@ public class CustomReportListener extends TestListenerAdapter {
     public void onTestFailure(ITestResult tr) {
         try {
             String screenShotPath = FileHelper.takeScreenShot(DriverManager.getCurrentDriver(), tr.getName());
+            logger = extent.createTest(tr.getName());
             logger.log(Status.FAIL, MarkupHelper.createLabel(tr.getName(), ExtentColor.RED));
             logger.error(tr.getThrowable());
             logger.fail("Screenshot:", MediaEntityBuilder.createScreenCaptureFromPath(screenShotPath).build());
@@ -80,6 +79,7 @@ public class CustomReportListener extends TestListenerAdapter {
     }
 
     public void onTestSkipped(ITestResult tr) {
+        logger = extent.createTest(tr.getName());
         logger.log(Status.SKIP, MarkupHelper.createLabel(tr.getName(), ExtentColor.ORANGE));
     }
 
