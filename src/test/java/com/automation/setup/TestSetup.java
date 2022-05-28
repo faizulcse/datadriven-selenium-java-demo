@@ -17,33 +17,9 @@ import java.net.URL;
 
 public class TestSetup implements Automation {
     public ResourceHelper settings = new ResourceHelper().getResource("settings");
+    boolean isRemote = settings.getBool("remote");
 
     public synchronized RemoteWebDriver startDriver(String browser) {
-        RemoteWebDriver driver = getWebDriver(browser.toLowerCase());
-        driver.manage().window().maximize();
-        driver.manage().deleteAllCookies();
-        return driver;
-    }
-
-    public synchronized void stopDriver(RemoteWebDriver driver) {
-        if (driver != null)
-            driver.quit();
-    }
-
-
-    private RemoteWebDriver getRemoteDriver(String browser) {
-        try {
-            DesiredCapabilities caps = new DesiredCapabilities();
-            caps.setBrowserName(browser);
-            return new RemoteWebDriver(new URL(settings.getString("hub")), caps);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private RemoteWebDriver getWebDriver(String browser) {
-        boolean isRemote = settings.getBool("remote");
         switch (browser) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
@@ -70,5 +46,21 @@ public class TestSetup implements Automation {
             default:
                 throw new RuntimeException("Error! Please enter a valid browser [" + browser + "]");
         }
+    }
+
+    public synchronized void stopDriver(RemoteWebDriver driver) {
+        if (driver != null)
+            driver.quit();
+    }
+
+    private RemoteWebDriver getRemoteDriver(String browser) {
+        try {
+            DesiredCapabilities caps = new DesiredCapabilities();
+            caps.setBrowserName(browser);
+            return new RemoteWebDriver(new URL(settings.getString("hub")), caps);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
