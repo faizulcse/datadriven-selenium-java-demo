@@ -9,13 +9,25 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 public class FileHelper {
-    public static String getRunningInfo() {
+    static List<String> list = new ArrayList<>();
+
+    private static String getRunningInfo() {
         String browser = DriverManager.getCurrentDriver().getCapabilities().getBrowserName();
         String osName = System.getProperty("os.name").split("\\s")[0];
         return "[" + browser + "_" + osName + "]";
+    }
+
+    public static String modifyTestName(String str) {
+        String tc = str + getRunningInfo();
+        int i = Collections.frequency(list, tc);
+        list.add(tc);
+        return i > 0 ? tc + "_" + i : tc;
     }
 
     public static String takeScreenShot(RemoteWebDriver driver, String screenshotName) {

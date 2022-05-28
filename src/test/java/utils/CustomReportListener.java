@@ -17,13 +17,9 @@ import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 
 public class CustomReportListener extends TestListenerAdapter {
-    List<String> list = new ArrayList<>();
     public ExtentHtmlReporter htmlReporter;
     public ExtentReports extent;
     public ExtentTest logger;
@@ -46,13 +42,9 @@ public class CustomReportListener extends TestListenerAdapter {
     }
 
     @Override
-    public void onTestStart(ITestResult result) {
-        // Update DataDriven test case name
-        String tc = result.getName() + FileHelper.getRunningInfo();
-        int i = Collections.frequency(list, tc);
-        list.add(tc);
-        tc = i > 0 ? tc + "_" + i : tc;
-        result.setTestName(tc);
+    public void onTestStart(ITestResult tr) {
+        String tc = FileHelper.modifyTestName(tr.getName());
+        tr.setTestName(tc);        // Modify DataDriven test name
     }
 
     public void onTestSuccess(ITestResult tr) {
