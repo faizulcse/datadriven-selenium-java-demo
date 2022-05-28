@@ -1,10 +1,8 @@
 package com.automation.testScenario;
 
 import com.automation.setup.DriverManager;
-import com.automation.setup.FileHelper;
 import com.automation.setup.TestSetup;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Optional;
@@ -26,13 +24,14 @@ public class BaseTest {
         String browser = browserType == null ? settings.getString("browser") : browserType;
 
         RemoteWebDriver driver = testSetup.startDriver(browser);
+        driver.manage().window().maximize();
+        driver.manage().deleteAllCookies();
+        driver.get(settings.getString("url"));
         DriverManager.setCurrentDriver(driver);
-        DriverManager.getCurrentDriver().get(settings.getString("url"));
     }
 
     @AfterMethod
-    public void tearDown(ITestResult result) {
-        FileHelper.takeScreenShot(DriverManager.getCurrentDriver(), result.getName());
+    public void tearDown() {
         testSetup.stopDriver(DriverManager.getCurrentDriver());
     }
 }

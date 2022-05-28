@@ -37,7 +37,7 @@ public class CustomReportListener extends TestListenerAdapter {
         extent.setSystemInfo("OS", System.getProperty("os.name"));
         extent.setSystemInfo("User", System.getProperty("user.name"));
         extent.setSystemInfo("Host", "localhost");
-        extent.setSystemInfo("Environment", "QA");
+        extent.setSystemInfo("Env", "QA");
 
         htmlReporter.config().setDocumentTitle("Selenium Automation Test Project"); // Tile of report
         htmlReporter.config().setReportName("Functional Test Automation Report"); // name of the report
@@ -47,42 +47,39 @@ public class CustomReportListener extends TestListenerAdapter {
 
     @Override
     public void onTestStart(ITestResult result) {
-        String browser = DriverManager.getCurrentDriver().getCapabilities().getBrowserName();
-        String osName = System.getProperty("os.name").split("\\s")[0];
-        String tc = result.getName() + "[" + browser + "_" + osName + "]";
+        // Update DataDriven test case name
+        String tc = result.getName() + FileHelper.getRunningInfo();
         int i = Collections.frequency(list, tc);
         list.add(tc);
         tc = i > 0 ? tc + "_" + i : tc;
         result.setTestName(tc);
+
+        // create new entry in th report
+        logger = extent.createTest(result.getName());
     }
 
     public void onTestSuccess(ITestResult tr) {
-//        tr.setTestName("[✓]" + tr.getName());
-        logger = extent.createTest(tr.getName()); // create new entry in th report
-        logger.log(Status.PASS, MarkupHelper.createLabel(tr.getName(), ExtentColor.GREEN)); // send the passed information to the report with GREEN color highlighted
-
         try {
-            logger.pass("Screenshot:", MediaEntityBuilder.createScreenCaptureFromPath(Automation.SCREENSHOT_DIR + FileHelper.takeScreenShot(DriverManager.getCurrentDriver(), tr.getName())).build());
+            String screenShotPath = FileHelper.takeScreenShot(DriverManager.getCurrentDriver(), tr.getName());
+            logger.log(Status.PASS, MarkupHelper.createLabel(tr.getName(), ExtentColor.GREEN));
+            logger.pass("Screenshot:", MediaEntityBuilder.createScreenCaptureFromPath(screenShotPath).build());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void onTestFailure(ITestResult tr) {
-//        tr.setTestName("[✗]" + tr.getName());
-        logger = extent.createTest(tr.getName()); // create new entry in th report
-        logger.log(Status.FAIL, MarkupHelper.createLabel(tr.getName(), ExtentColor.RED)); // send the passed information to the report with GREEN color highlighted
-
         try {
+            String screenShotPath = FileHelper.takeScreenShot(DriverManager.getCurrentDriver(), tr.getName());
+            logger.log(Status.FAIL, MarkupHelper.createLabel(tr.getName(), ExtentColor.RED));
             logger.error(tr.getThrowable());
-            logger.fail("Screenshot:", MediaEntityBuilder.createScreenCaptureFromPath(Automation.SCREENSHOT_DIR + FileHelper.takeScreenShot(DriverManager.getCurrentDriver(), tr.getName())).build());
+            logger.fail("Screenshot:", MediaEntityBuilder.createScreenCaptureFromPath(screenShotPath).build());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void onTestSkipped(ITestResult tr) {
-        logger = extent.createTest(tr.getName()); // create new entry in th report
         logger.log(Status.SKIP, MarkupHelper.createLabel(tr.getName(), ExtentColor.ORANGE));
     }
 

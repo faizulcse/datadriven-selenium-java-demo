@@ -26,7 +26,8 @@ public class TestSetup implements Automation {
     }
 
     public synchronized void stopDriver(RemoteWebDriver driver) {
-        driver.quit();
+        if (driver != null)
+            driver.quit();
     }
 
 

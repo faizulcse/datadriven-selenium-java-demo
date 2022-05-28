@@ -12,16 +12,22 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 public class FileHelper {
+    public static String getRunningInfo() {
+        String browser = DriverManager.getCurrentDriver().getCapabilities().getBrowserName();
+        String osName = System.getProperty("os.name").split("\\s")[0];
+        return "[" + browser + "_" + osName + "]";
+    }
+
     public static String takeScreenShot(RemoteWebDriver driver, String screenshotName) {
         String screenshot = screenshotName + ".png";
+        String screenShotPath = Automation.SCREENSHOT_DIR + screenshot;
         File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
         try {
-            FileUtils.copyFile(screenshotFile, new File(Automation.SCREENSHOT_DIR + screenshot));
+            FileUtils.copyFile(screenshotFile, new File(screenShotPath));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(screenshot);
-        return screenshot;
+        return screenShotPath;
     }
 
     public static void deleteAllScreenshot() {
