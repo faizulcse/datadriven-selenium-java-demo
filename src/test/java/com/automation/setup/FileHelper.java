@@ -23,14 +23,14 @@ public class FileHelper {
         return "[" + browser + "_" + osName + "]";
     }
 
-    public static String modifyTestName(String str) {
+    public static synchronized String modifyTestName(String str) {
         String tc = str + getRunningInfo();
         int i = Collections.frequency(list, tc);
         list.add(tc);
         return i > 0 ? tc + "_" + i : tc;
     }
 
-    public static String takeScreenShot(RemoteWebDriver driver, String screenshotName) {
+    public static synchronized String takeScreenShot(RemoteWebDriver driver, String screenshotName) {
         String screenshot = screenshotName + ".png";
         String screenShotPath = Automation.SCREENSHOT_DIR + screenshot;
         File screenshotFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);

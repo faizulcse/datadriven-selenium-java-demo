@@ -10,44 +10,42 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.opera.OperaDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import utils.ResourceHelper;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
 public class TestSetup implements Automation {
-    public ResourceHelper settings = new ResourceHelper().getResource("settings");
-    boolean isRemote = settings.getBool("remote");
-
+    @Override
     public synchronized RemoteWebDriver startDriver(String browser) {
         switch (browser) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions = new ChromeOptions();
-                chromeOptions.setHeadless(settings.getBool("headless"));
-                return isRemote ? getRemoteDriver(browser) : new ChromeDriver(chromeOptions);
+                chromeOptions.setHeadless(HEADLESS);
+                return REMOTE ? getRemoteDriver(browser) : new ChromeDriver(chromeOptions);
 
             case "opera":
                 WebDriverManager.operadriver().setup();
-                return isRemote ? getRemoteDriver(browser) : new OperaDriver();
+                return REMOTE ? getRemoteDriver(browser) : new OperaDriver();
 
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
                 FirefoxOptions firefoxOptions = new FirefoxOptions();
-                firefoxOptions.setHeadless(settings.getBool("headless"));
-                return isRemote ? getRemoteDriver(browser) : new FirefoxDriver(firefoxOptions);
+                firefoxOptions.setHeadless(HEADLESS);
+                return REMOTE ? getRemoteDriver(browser) : new FirefoxDriver(firefoxOptions);
 
             case "edge":
                 WebDriverManager.edgedriver().setup();
                 EdgeOptions edgeOptions = new EdgeOptions();
-                edgeOptions.setHeadless(settings.getBool("headless"));
-                return isRemote ? getRemoteDriver(browser) : new EdgeDriver(edgeOptions);
+                edgeOptions.setHeadless(HEADLESS);
+                return REMOTE ? getRemoteDriver(browser) : new EdgeDriver(edgeOptions);
 
             default:
                 throw new RuntimeException("Error! Please enter a valid browser [" + browser + "]");
         }
     }
 
+    @Override
     public synchronized void stopDriver(RemoteWebDriver driver) {
         if (driver != null)
             driver.quit();
@@ -57,7 +55,7 @@ public class TestSetup implements Automation {
         try {
             DesiredCapabilities caps = new DesiredCapabilities();
             caps.setBrowserName(browser);
-            return new RemoteWebDriver(new URL(settings.getString("hub")), caps);
+            return new RemoteWebDriver(new URL(HUB_URL), caps);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

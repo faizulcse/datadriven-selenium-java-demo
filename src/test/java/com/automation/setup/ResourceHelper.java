@@ -1,4 +1,4 @@
-package utils;
+package com.automation.setup;
 
 import java.util.ResourceBundle;
 
